@@ -19,6 +19,8 @@ class Profile extends Model
         'gender',
         'is_public',
         'coin_balance',
+        'followers_count',
+        'following_count',
         'cultural_interests',
         'learning_goal',
     ];
@@ -29,6 +31,8 @@ class Profile extends Model
             'date_of_birth' => 'date',
             'is_public' => 'boolean',
             'coin_balance' => 'integer',
+            'followers_count' => 'integer',
+            'following_count' => 'integer',
             'cultural_interests' => 'array',
         ];
     }

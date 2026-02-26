@@ -21,6 +21,11 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at->toISOString(),
             'profile' => new ProfileResource($this->whenLoaded('profile')),
             'languages' => UserLanguageResource::collection($this->whenLoaded('languages')),
+            
+            // Relationship flags (when available)
+            'is_following' => $this->when(isset($this->is_following), $this->is_following ?? false),
+            'is_followed_by' => $this->when(isset($this->is_followed_by), $this->is_followed_by ?? false),
+            'is_blocked' => $this->when(isset($this->is_blocked), $this->is_blocked ?? false),
         ];
     }
 }

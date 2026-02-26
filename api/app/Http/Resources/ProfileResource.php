@@ -18,6 +18,8 @@ class ProfileResource extends JsonResource
             'gender' => $this->gender,
             'is_public' => $this->is_public,
             'coin_balance' => $this->coin_balance,
+            'followers_count' => $this->followers_count,
+            'following_count' => $this->following_count,
             'cultural_interests' => $this->cultural_interests,
             'learning_goal' => $this->learning_goal,
         ];

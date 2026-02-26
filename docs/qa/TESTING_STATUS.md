@@ -29,13 +29,13 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 1.1 | Register new user | `POST` | `/auth/register` | ⬜ | Body: `{name, username, email, password, password_confirmation}` |
-| 1.2 | Register duplicate email | `POST` | `/auth/register` | ⬜ | Should return 422 |
-| 1.3 | Register duplicate username | `POST` | `/auth/register` | ⬜ | Should return 422 |
-| 1.4 | Login with email/password | `POST` | `/auth/login` | ⬜ | Returns token |
-| 1.5 | Login wrong password | `POST` | `/auth/login` | ⬜ | Should return 401 |
-| 1.6 | Logout | `POST` | `/auth/logout` | ⬜ | Requires Bearer token |
-| 1.7 | Refresh token | `POST` | `/auth/refresh` | ⬜ | |
+| 1.1 | Register new user | `POST` | `/auth/register` | ✅ | Fixed: Added 'name' to create and Sanctum migrations |
+| 1.2 | Register duplicate email | `POST` | `/auth/register` | ✅ | Returns 422 |
+| 1.3 | Register duplicate username | `POST` | `/auth/register` | ✅ | Returns 422 |
+| 1.4 | Login with email/password | `POST` | `/auth/login` | ✅ | |
+| 1.5 | Login wrong password | `POST` | `/auth/login` | ✅ | |
+| 1.6 | Logout | `POST` | `/auth/logout` | ✅ | |
+| 1.7 | Refresh token | `POST` | `/auth/refresh` | ✅ | |
 | 1.8 | Forgot password | `POST` | `/auth/forgot-password` | ⬜ | Body: `{email}` |
 | 1.9 | Reset password | `POST` | `/auth/reset-password` | ⬜ | Body: `{token, email, password, password_confirmation}` |
 | 1.10 | Resend verification email | `POST` | `/auth/resend-verification` | ⬜ | |

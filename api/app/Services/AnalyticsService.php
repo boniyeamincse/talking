@@ -72,7 +72,7 @@ class AnalyticsService
         $activeUsers = User::where('last_seen_at', '>=', $startDate)->count();
 
         // Top countries
-        $topCountries = DB::table('user_profiles')
+        $topCountries = DB::table('profiles')
             ->select('country', DB::raw('COUNT(*) as count'))
             ->whereNotNull('country')
             ->groupBy('country')

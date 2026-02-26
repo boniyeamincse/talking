@@ -14,6 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable, HasApiTokens;
 
     protected $fillable = [
+        'name',
         'uuid',
         'username',
         'email',
@@ -117,6 +118,28 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reports()
     {
         return $this->hasMany(Report::class, 'reporter_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants')
+            ->withPivot('role', 'joined_at', 'last_read_at')
+            ->withTimestamps();
+    }
+
+    public function warnings()
+    {
+        return $this->hasMany(UserWarning::class);
+    }
+
+    public function savedPosts()
+    {
+        return $this->hasMany(SavedPost::class);
     }
 
     public function learningLanguages()

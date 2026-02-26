@@ -50,7 +50,7 @@ class ProfileController extends BaseController
             'gender' => ['sometimes', Rule::in(['male', 'female', 'other', 'prefer_not_to_say'])],
             'is_public' => ['sometimes', 'boolean'],
             'cultural_interests' => ['sometimes', 'array', 'max:20'],
-            'cultural_interests.*' => ['string', 'size:2'],
+            'cultural_interests.*' => ['string', 'min:2', 'max:50'],
             'learning_goal' => ['sometimes', Rule::in(['casual', 'study', 'cultural_exchange', 'friendship'])],
         ]);
 

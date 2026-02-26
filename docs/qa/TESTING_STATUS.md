@@ -47,16 +47,16 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 2.1 | Get my user info | `GET` | `/users/me` | ⬜ | |
-| 2.2 | Update my user info | `PUT` | `/users/me` | ⬜ | |
-| 2.3 | View other user | `GET` | `/users/{id}` | ⬜ | |
-| 2.4 | Search users | `GET` | `/users/search` | ⬜ | Query: `?q=keyword` |
-| 2.5 | Popular searches | `GET` | `/users/popular-searches` | ⬜ | |
-| 2.6 | Get my profile | `GET` | `/profiles/me` | ⬜ | |
-| 2.7 | Update my profile | `PUT` | `/profiles/me` | ⬜ | Body: `{bio, country, date_of_birth...}` |
-| 2.8 | Upload profile photo | `POST` | `/profiles/me/photo` | ⬜ | Multipart: `photo` file |
-| 2.9 | Update my languages | `PUT` | `/profiles/me/languages` | ⬜ | Body: `{languages: [...]}` |
-| 2.10 | View other profile | `GET` | `/profiles/{id}` | ⬜ | |
+| 2.1 | Get my user info | `GET` | `/users/me` | ✅ | |
+| 2.2 | Update my user info | `PUT` | `/users/me` | ✅ | |
+| 2.3 | View other user | `GET` | `/users/{id}` | ✅ | |
+| 2.4 | Search users | `GET` | `/users/search` | ✅ | Fixed: Redis missing error in SearchCacheService |
+| 2.5 | Popular searches | `GET` | `/users/popular-searches` | ✅ | |
+| 2.6 | Get my profile | `GET` | `/profiles/me` | ✅ | |
+| 2.7 | Update my profile | `PUT` | `/profiles/me` | ✅ | Fixed: cultural_interests validation |
+| 2.8 | Upload profile photo | `POST` | `/profiles/me/photo` | ✅ | Requires multipart/form-data |
+| 2.9 | Update my languages | `PUT` | `/profiles/me/languages` | ✅ | |
+| 2.10 | View other profile | `GET` | `/profiles/{id}` | ✅ | |
 
 ---
 

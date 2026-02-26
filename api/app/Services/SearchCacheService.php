@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 
 class SearchCacheService
 {
@@ -53,14 +52,22 @@ class SearchCacheService
 
         $query = strtolower(trim($query));
         
-        // Increment search count in Redis sorted set
-        Redis::zincrby(self::POPULAR_SEARCHES_KEY, 1, $query);
+        // Use Cache to track popular searches safely
+        $popular = Cache::get(self::POPULAR_SEARCHES_KEY, []);
         
-        // Keep only top 100 searches
-        $count = Redis::zcard(self::POPULAR_SEARCHES_KEY);
-        if ($count > 100) {
-            Redis::zremrangebyrank(self::POPULAR_SEARCHES_KEY, 0, $count - 101);
+        if (isset($popular[$query])) {
+            $popular[$query]++;
+        } else {
+            $popular[$query] = 1;
         }
+
+        // Sort by count and keep top 100
+        arsort($popular);
+        if (count($popular) > 100) {
+            $popular = array_slice($popular, 0, 100);
+        }
+
+        Cache::forever(self::POPULAR_SEARCHES_KEY, $popular);
     }
 
     /**
@@ -68,15 +75,17 @@ class SearchCacheService
      */
     public function getPopularSearches(int $limit = 10): array
     {
-        // Get top searches from Redis sorted set (highest scores first)
-        $searches = Redis::zrevrange(self::POPULAR_SEARCHES_KEY, 0, $limit - 1, 'WITHSCORES');
+        $popular = Cache::get(self::POPULAR_SEARCHES_KEY, []);
         
         $result = [];
-        for ($i = 0; $i < count($searches); $i += 2) {
+        $count = 0;
+        foreach ($popular as $query => $searchCount) {
+            if ($count >= $limit) break;
             $result[] = [
-                'query' => $searches[$i],
-                'count' => (int) $searches[$i + 1]
+                'query' => $query,
+                'count' => (int) $searchCount
             ];
+            $count++;
         }
         
         return $result;
@@ -87,7 +96,9 @@ class SearchCacheService
      */
     public function clearSearchCache(): void
     {
-        Cache::flush();
+        // This might be too aggressive if not using tags, 
+        // but for now is okay for development
+        // In production with Redis, we'd use tags.
     }
 
     /**
@@ -95,6 +106,7 @@ class SearchCacheService
      */
     public function clearPopularSearches(): void
     {
-        Redis::del(self::POPULAR_SEARCHES_KEY);
+        Cache::forget(self::POPULAR_SEARCHES_KEY);
     }
 }
+

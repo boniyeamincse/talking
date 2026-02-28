@@ -224,13 +224,13 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 13.1 | List notifications | `GET` | `/notifications` | ⬜ | |
-| 13.2 | Mark one as read | `POST` | `/notifications/{id}/read` | ⬜ | |
-| 13.3 | Mark all as read | `POST` | `/notifications/read-all` | ⬜ | |
-| 13.4 | Get notification settings | `GET` | `/notifications/settings` | ⬜ | |
-| 13.5 | Update notification settings | `PUT` | `/notifications/settings` | ⬜ | |
-| 13.6 | Register device token | `POST` | `/notifications/device-token` | ⬜ | Body: `{token, platform}` |
-| 13.7 | Remove device token | `DELETE` | `/notifications/device-token` | ⬜ | Body: `{token}` |
+| 13.1 | List notifications | `GET` | `/notifications` | ✅ | |
+| 13.2 | Mark one as read | `POST` | `/notifications/{id}/read` | ✅ | |
+| 13.3 | Mark all as read | `POST` | `/notifications/read-all` | ✅ | |
+| 13.4 | Get notification settings | `GET` | `/notifications/settings` | ✅ | |
+| 13.5 | Update notification settings | `PUT` | `/notifications/settings` | ✅ | |
+| 13.6 | Register device token | `POST` | `/notifications/device-token` | ✅ | Body: `{token, platform}` |
+| 13.7 | Remove device token | `DELETE` | `/notifications/device-token` | ✅ | Body: `{token}` |
 
 ---
 
@@ -313,8 +313,8 @@
 | 10 — Translation | 6 | 6 | 0 | 0 |
 | 11 — Gifts/Coins | 9 | 9 | 0 | 0 |
 | 12 — Matching | 6 | 6 | 0 | 0 |
-| 13 — Notifications | 7 | 0 | 0 | 7 |
+| 13 — Notifications | 7 | 7 | 0 | 0 |
 | 14 — Reports | 2 | 0 | 0 | 2 |
 | 15 — Admin | 23 | 0 | 0 | 23 |
 | Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **110** | **0** | **43** |
+| **TOTAL** | **153** | **117** | **0** | **36** |

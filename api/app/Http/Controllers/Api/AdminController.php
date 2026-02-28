@@ -323,7 +323,7 @@ class AdminController extends BaseController
     public function createGift(Request $request): JsonResponse
     {
         $request->validate([
-            'category_id' => 'required|exists:gift_categories,id',
+            'gift_category_id' => 'required|exists:gift_categories,id',
             'name' => 'required|string|max:100',
             'description' => 'nullable|string|max:500',
             'price_coins' => 'required|integer|min:1',
@@ -332,7 +332,12 @@ class AdminController extends BaseController
             'is_active' => 'nullable|boolean',
         ]);
 
-        $gift = $this->adminService->createGift($request->all());
+        $data = $request->all();
+        if (!isset($data['slug'])) {
+            $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        }
+
+        $gift = $this->adminService->createGift($data);
         return $this->successResponse($gift, 'Gift created successfully.', 201);
     }
 
@@ -342,7 +347,7 @@ class AdminController extends BaseController
     public function updateGift(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'category_id' => 'nullable|exists:gift_categories,id',
+            'gift_category_id' => 'nullable|exists:gift_categories,id',
             'name' => 'nullable|string|max:100',
             'description' => 'nullable|string|max:500',
             'price_coins' => 'nullable|integer|min:1',

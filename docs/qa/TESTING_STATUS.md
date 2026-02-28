@@ -251,34 +251,34 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 15.1 | List users | `GET` | `/admin/users` | ⬜ | Query: `?search=&status=&role=` |
-| 15.2 | User detail | `GET` | `/admin/users/{id}` | ⬜ | |
-| 15.3 | Suspend user | `POST` | `/admin/users/{id}/suspend` | ⬜ | Body: `{reason, days?}` |
-| 15.4 | Restore user | `POST` | `/admin/users/{id}/restore` | ⬜ | |
-| 15.5 | Warn user | `POST` | `/admin/users/{id}/warn` | ⬜ | Body: `{reason, details?}` |
-| 15.6 | List reports | `GET` | `/admin/reports` | ⬜ | Query: `?status=&type=` |
-| 15.7 | Report detail | `GET` | `/admin/reports/{id}` | ⬜ | |
-| 15.8 | Resolve report | `POST` | `/admin/reports/{id}/resolve` | ⬜ | Body: `{status, admin_notes?}` |
-| 15.9 | User analytics | `GET` | `/admin/analytics/users` | ⬜ | Query: `?period=week` |
-| 15.10 | Call analytics | `GET` | `/admin/analytics/calls` | ⬜ | Query: `?period=week` |
+| 15.1 | List users | `GET` | `/admin/users` | ✅ | Query: `?search=&status=&role=` |
+| 15.2 | User detail | `GET` | `/admin/users/{id}` | ✅ | |
+| 15.3 | Suspend user | `POST` | `/admin/users/{id}/suspend` | ✅ | Body: `{reason, days?}` |
+| 15.4 | Restore user | `POST` | `/admin/users/{id}/restore` | ✅ | |
+| 15.5 | Warn user | `POST` | `/admin/users/{id}/warn` | ✅ | Body: `{reason, details?}` |
+| 15.6 | List reports | `GET` | `/admin/reports` | ✅ | Query: `?status=&type=` |
+| 15.7 | Report detail | `GET` | `/admin/reports/{id}` | ✅ | |
+| 15.8 | Resolve report | `POST` | `/admin/reports/{id}/resolve` | ✅ | Body: `{status, admin_notes?}` |
+| 15.9 | User analytics | `GET` | `/admin/analytics/users` | ✅ | Query: `?period=week` |
+| 15.10 | Call analytics | `GET` | `/admin/analytics/calls` | ✅ | Query: `?period=week` |
 
 ### Super Admin Only Routes
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 15.11 | Ban user | `POST` | `/admin/users/{id}/ban` | ⬜ | Body: `{reason}` |
-| 15.12 | List admins | `GET` | `/admin/admins` | ⬜ | |
-| 15.13 | Create admin | `POST` | `/admin/admins` | ⬜ | Body: `{name, username, email, password, role}` |
-| 15.14 | Update admin | `PUT` | `/admin/admins/{id}` | ⬜ | Body: `{name?, email?, role?}` |
-| 15.15 | Remove admin | `DELETE` | `/admin/admins/{id}` | ⬜ | |
-| 15.16 | Platform overview | `GET` | `/admin/analytics/overview` | ⬜ | |
-| 15.17 | Revenue analytics | `GET` | `/admin/analytics/revenue` | ⬜ | Query: `?period=month` |
-| 15.18 | Get settings | `GET` | `/admin/settings` | ⬜ | |
-| 15.19 | Update settings | `PUT` | `/admin/settings` | ⬜ | Body: `{settings: {...}}` |
-| 15.20 | List gifts (admin) | `GET` | `/admin/gifts` | ⬜ | |
-| 15.21 | Create gift | `POST` | `/admin/gifts` | ⬜ | Body: `{category_id, name, price_coins, rarity}` |
-| 15.22 | Update gift | `PUT` | `/admin/gifts/{id}` | ⬜ | |
-| 15.23 | Delete gift | `DELETE` | `/admin/gifts/{id}` | ⬜ | |
+| 15.11 | Ban user | `POST` | `/admin/users/{id}/ban` | ✅ | Body: `{reason}` |
+| 15.12 | List admins | `GET` | `/admin/admins` | ✅ | |
+| 15.13 | Create admin | `POST` | `/admin/admins` | ✅ | Body: `{name, username, email, password, role}` |
+| 15.14 | Update admin | `PUT` | `/admin/admins/{id}` | ✅ | Body: `{name?, email?, role?}` |
+| 15.15 | Remove admin | `DELETE` | `/admin/admins/{id}` | ✅ | |
+| 15.16 | Platform overview | `GET` | `/admin/analytics/overview` | ✅ | |
+| 15.17 | Revenue analytics | `GET` | `/admin/analytics/revenue` | ✅ | Query: `?period=month` |
+| 15.18 | Get settings | `GET` | `/admin/settings` | ✅ | |
+| 15.19 | Update settings | `PUT` | `/admin/settings` | ✅ | Body: `{settings: {...}}` |
+| 15.20 | List gifts (admin) | `GET` | `/admin/gifts` | ✅ | |
+| 15.21 | Create gift | `POST` | `/admin/gifts` | ✅ | Body: `{category_id, name, price_coins, rarity}` |
+| 15.22 | Update gift | `PUT` | `/admin/gifts/{id}` | ✅ | |
+| 15.23 | Delete gift | `DELETE` | `/admin/gifts/{id}` | ✅ | |
 
 ---
 
@@ -315,6 +315,6 @@
 | 12 — Matching | 6 | 6 | 0 | 0 |
 | 13 — Notifications | 7 | 7 | 0 | 0 |
 | 14 — Reports | 2 | 2 | 0 | 0 |
-| 15 — Admin | 23 | 0 | 0 | 23 |
+| 15 — Admin | 23 | 23 | 0 | 0 |
 | Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **119** | **0** | **34** |
+| **TOTAL** | **153** | **142** | **0** | **11** |

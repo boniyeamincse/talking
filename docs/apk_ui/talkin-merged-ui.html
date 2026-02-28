@@ -1,0 +1,2675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talkin — Complete App UI Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080C14;
+  --bg2: #0D1120;
+  --surface: #111827;
+  --surface2: #1A2236;
+  --surface3: #212D42;
+  --border: #252F45;
+  --border2: #1E2A3D;
+  --p: #7C6AF7;
+  --p2: #A99EFF;
+  --p3: #C5BCFF;
+  --pink: #F472B6;
+  --pink2: #FB7BB8;
+  --teal: #2DD4BF;
+  --green: #22D3A0;
+  --gold: #F59E0B;
+  --orange: #FB923C;
+  --red: #F87171;
+  --text: #EEF2FF;
+  --text2: #94A3B8;
+  --text3: #4B5A73;
+  --vip: linear-gradient(135deg, #F59E0B, #FB923C);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  text-align: center;
+  padding: 70px 20px 20px;
+  position: relative;
+}
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(124,106,247,0.12) 0%, rgba(244,114,182,0.06) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+.app-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 8px 22px;
+  margin-bottom: 28px;
+}
+.logo-glow {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--p), var(--pink));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 16px rgba(124,106,247,0.5);
+}
+.app-logo span {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--p2), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-header h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(28px, 5vw, 58px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+.page-header h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--p2) 0%, var(--pink) 60%, var(--orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-header p {
+  color: var(--text2);
+  font-size: 16px;
+  font-weight: 400;
+  max-width: 500px;
+  margin: 0 auto 50px;
+  line-height: 1.65;
+}
+
+/* ─── SCREEN SECTION LABELS ─── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1500px;
+  margin: 50px auto 30px;
+  padding: 0 40px;
+}
+.divider-label {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  white-space: nowrap;
+}
+.divider-line { flex: 1; height: 1px; background: var(--border2); }
+.divider-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+/* ─── SCREENS GRID ─── */
+.screens-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 28px;
+  padding: 0 40px 40px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.screen-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.screen-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+/* ─── PHONE FRAME ─── */
+.phone {
+  width: 290px;
+  height: 610px;
+  background: var(--surface);
+  border-radius: 42px;
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 40px 70px rgba(0,0,0,0.7),
+    0 0 60px rgba(124,106,247,0.04);
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s;
+}
+.phone:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 60px 90px rgba(0,0,0,0.75), 0 0 40px rgba(124,106,247,0.12);
+}
+
+.notch {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 90px; height: 26px;
+  background: var(--bg);
+  border-radius: 0 0 16px 16px;
+  z-index: 20;
+}
+.notch::after {
+  content: '';
+  position: absolute;
+  top: 7px; left: 50%; transform: translateX(-50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #1C2235;
+  border: 1.5px solid #2A3352;
+}
+
+.phone-scroll {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── STATUS BAR ─── */
+.sb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 34px 18px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text);
+}
+.sb-right { display: flex; gap: 4px; align-items: center; font-size: 10px; }
+
+/* ─── BOTTOM NAV ─── */
+.bnav {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  background: rgba(13,17,32,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px 8px;
+  z-index: 10;
+}
+.bn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  opacity: 0.38;
+  transition: opacity 0.2s;
+}
+.bn.active { opacity: 1; }
+.bn-ic {
+  width: 32px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 9px;
+  font-size: 17px;
+  position: relative;
+}
+.bn.active .bn-ic {
+  background: rgba(124,106,247,0.18);
+}
+.bn-lb {
+  font-size: 8.5px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.bn.active .bn-lb { color: var(--p2); }
+.bn-dot {
+  position: absolute;
+  top: 2px; right: 4px;
+  width: 6px; height: 6px;
+  background: var(--pink);
+  border-radius: 50%;
+  border: 1.5px solid var(--bg2);
+}
+
+/* ─── VIP BADGE ─── */
+.vip-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: linear-gradient(135deg, #F59E0B, #FB923C);
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* ─── FLAG PILL ─── */
+.flag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+/* ══════════════════════════════════
+   SCREEN 1: HOME / MOMENTS (FEED)
+══════════════════════════════════ */
+.s-feed {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.feed-content {
+  flex: 1;
+  overflow-y: scroll;
+  padding-bottom: 64px;
+  scrollbar-width: none;
+}
+.feed-content::-webkit-scrollbar { display: none; }
+
+.feed-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px 12px;
+}
+.feed-tab {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  cursor: pointer;
+  color: var(--text3);
+}
+.feed-tab.active {
+  background: white;
+  color: var(--bg);
+}
+.feed-right {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+}
+
+.feed-filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.feed-filter-row::-webkit-scrollbar { display: none; }
+.filter-chip {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--text3);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.filter-chip.on {
+  background: rgba(124,106,247,0.15);
+  border-color: rgba(124,106,247,0.4);
+  color: var(--p2);
+}
+
+.feed-post {
+  margin: 0 0 2px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border2);
+}
+.post-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.post-ava {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  position: relative;
+  flex-shrink: 0;
+}
+.post-ava-flag {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  font-size: 12px;
+}
+.post-user-info { flex: 1; }
+.post-uname {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.post-langs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+.lang-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.lang-badge.en { background: rgba(34,211,160,0.15); color: var(--green); }
+.lang-badge.ar { background: rgba(251,146,60,0.15); color: var(--orange); }
+.lang-badge.tl { background: rgba(244,114,182,0.15); color: var(--pink); }
+.translate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--p2);
+  cursor: pointer;
+  margin-top: 2px;
+}
+.post-follow-btn {
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1.5px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text2);
+  cursor: pointer;
+}
+.post-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.post-imgs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.post-img {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.post-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border2);
+}
+.post-act {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text3);
+  cursor: pointer;
+  font-weight: 600;
+}
+.post-act.liked { color: var(--pink); }
+.post-act-icon { font-size: 16px; }
+.post-save { margin-left: auto; font-size: 16px; cursor: pointer; }
+
+/* ══════════════════════════════════
+   SCREEN 2: PROFILE
+══════════════════════════════════ */
+.s-profile {
+  height: 100%;
+  background: var(--bg);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding-bottom: 64px;
+}
+.s-profile::-webkit-scrollbar { display: none; }
+
+.profile-hero {
+  position: relative;
+  height: 110px;
+  background: linear-gradient(135deg, #1a0d3b 0%, #0d1a4a 40%, #071428 100%);
+  overflow: hidden;
+}
+.profile-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(124,106,247,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(244,114,182,0.2) 0%, transparent 50%);
+}
+.profile-hero-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.profile-edit-btn {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.profile-ava-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 16px;
+  margin-top: -42px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+.profile-ava-ring {
+  width: 82px; height: 82px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--p), var(--pink));
+  box-shadow: 0 0 24px rgba(124,106,247,0.4);
+}
+.profile-ava-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 3px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px;
+}
+.profile-actions-top {
+  display: flex;
+  gap: 8px;
+  padding-top: 44px;
+}
+.p-msg-btn {
+  padding: 8px 18px;
+  border-radius: 12px;
+  background: var(--p);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(124,106,247,0.35);
+}
+.p-gift-btn {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile-name-row {
+  padding: 0 16px 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.profile-name {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+}
+.gender-icon { font-size: 14px; }
+.profile-handle {
+  padding: 0 16px 8px;
+  font-size: 11px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.profile-langs-row {
+  padding: 0 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Stats */
+.profile-stats-bar {
+  margin: 0 14px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+}
+.pstat {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+}
+.pstat:last-child { border-right: none; }
+.pstat-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.pstat-notif {
+  position: absolute;
+  top: 6px; right: 12px;
+  width: 14px; height: 14px;
+  background: var(--pink);
+  border-radius: 50%;
+  border: 1.5px solid var(--bg);
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.pstat-label { font-size: 9px; color: var(--text3); margin-top: 1px; }
+
+/* Review/Gift bar */
+.review-gift-bar {
+  margin: 0 14px 14px;
+  display: flex;
+  gap: 8px;
+}
+.rg-card {
+  flex: 1;
+  background: linear-gradient(135deg, #1A2236, #141C2F);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rg-icon { font-size: 22px; }
+.rg-info-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+}
+.rg-info-label { font-size: 10px; color: var(--text3); }
+
+/* Tags */
+.ptags-section { padding: 0 16px 14px; }
+.psec-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.ptags-wrap { display: flex; gap: 7px; flex-wrap: wrap; }
+.ptag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+}
+
+/* Intro */
+.pintro-section { padding: 0 16px 14px; }
+.pintro-box {
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+/* Review empty */
+.preview-empty {
+  margin: 0 16px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+}
+.preview-empty-icon { font-size: 28px; margin-bottom: 6px; }
+.preview-empty-text { font-size: 11px; color: var(--text3); }
+
+/* ══════════════════════════════════
+   SCREEN 3: MESSAGES
+══════════════════════════════════ */
+.s-messages {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-header {
+  padding: 4px 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.msg-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.msg-new-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: var(--p);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(124,106,247,0.35);
+}
+
+.msg-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 0 16px 16px;
+}
+.msg-search span { font-size: 14px; color: var(--text3); }
+.msg-search input {
+  background: none; border: none; outline: none;
+  color: var(--text); font-size: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  flex: 1;
+}
+.msg-search input::placeholder { color: var(--text3); }
+
+/* Recent visitors */
+.rv-section { padding: 0 0 14px; }
+.rv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px 10px;
+}
+.rv-title { font-size: 12px; font-weight: 700; font-family: 'Bricolage Grotesque', sans-serif; }
+.rv-close { font-size: 12px; color: var(--text3); cursor: pointer; }
+.rv-cards {
+  display: flex;
+  gap: 10px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.rv-cards::-webkit-scrollbar { display: none; }
+.rv-card {
+  flex-shrink: 0;
+  width: 78px; height: 100px;
+  border-radius: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+.rv-card-bg { 
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px;
+}
+.rv-card-flag {
+  position: absolute;
+  top: 6px; left: 6px;
+  font-size: 14px;
+}
+.rv-card-gender {
+  position: absolute;
+  bottom: 8px; left: 50%; transform: translateX(-50%);
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.rv-card-gender.m { background: #3B82F6; color: white; }
+.rv-card-gender.f { background: var(--pink); color: white; }
+.rv-card-gender.lnk {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.msg-list {
+  flex: 1;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding-bottom: 64px;
+}
+.msg-list::-webkit-scrollbar { display: none; }
+.msg-list-title {
+  padding: 0 16px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.msg-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.msg-item:hover { background: var(--surface2); }
+.mi-ava {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  position: relative;
+  flex-shrink: 0;
+}
+.mi-flag {
+  position: absolute;
+  bottom: -1px; right: -1px;
+  font-size: 13px;
+}
+.mi-online {
+  position: absolute;
+  bottom: 1px; right: 1px;
+  width: 11px; height: 11px;
+  background: var(--green);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+.mi-info { flex: 1; min-width: 0; }
+.mi-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; font-family: 'Bricolage Grotesque', sans-serif; }
+.mi-preview { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mi-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.mi-time { font-size: 10px; color: var(--text3); }
+.mi-badge {
+  background: var(--p);
+  color: white;
+  font-size: 8.5px;
+  font-weight: 800;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  padding: 2px 6px;
+  border-radius: 50px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ══════════════════════════════════
+   SCREEN 4: PARTY / ROOMS LIST
+══════════════════════════════════ */
+.s-party {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.party-header {
+  padding: 4px 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.party-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.party-actions { display: flex; gap: 8px; }
+.trophy-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+.new-room-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--p);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(124,106,247,0.35);
+}
+
+/* Friends in rooms */
+.friends-in-rooms {
+  padding: 0 16px 14px;
+}
+.fir-title { font-size: 12px; font-weight: 700; font-family: 'Bricolage Grotesque', sans-serif; color: var(--text2); margin-bottom: 10px; }
+.fir-row { display: flex; gap: 14px; }
+.fir-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.fir-ring {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  padding: 2.5px;
+  background: linear-gradient(135deg, var(--p), var(--pink));
+  box-shadow: 0 0 16px rgba(124,106,247,0.3);
+}
+.fir-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 3px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  position: relative;
+}
+.fir-vip {
+  position: absolute;
+  bottom: -8px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, #F59E0B, #FB923C);
+  border-radius: 50px;
+  padding: 1px 6px;
+  font-size: 7px;
+  font-weight: 800;
+  color: white;
+  white-space: nowrap;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.fir-name { font-size: 9.5px; color: var(--text2); font-weight: 600; margin-top: 6px; }
+
+/* Language filter chips */
+.lang-filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  align-items: center;
+}
+.lang-filter-row::-webkit-scrollbar { display: none; }
+.lf-chip {
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  border: 1.5px solid var(--border);
+  color: var(--text3);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.lf-chip.active {
+  background: white;
+  color: var(--bg);
+  border-color: white;
+}
+.lf-menu {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  color: var(--text3);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.rooms-list-scroll {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 0 14px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: none;
+}
+.rooms-list-scroll::-webkit-scrollbar { display: none; }
+
+.room-card {
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.room-card:hover { border-color: rgba(124,106,247,0.5); }
+.room-card-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+}
+.room-card-content { padding: 12px 14px; position: relative; z-index: 1; }
+.room-top-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.room-signal { font-size: 12px; }
+.room-langs { display: flex; gap: 4px; }
+.room-lang-tag {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.room-lang-tag.ar { background: rgba(251,146,60,0.2); color: var(--orange); }
+.room-lang-tag.en { background: rgba(34,211,160,0.2); color: var(--green); }
+.room-lang-tag.bn { background: rgba(244,114,182,0.2); color: var(--pink); }
+.room-tag-pill {
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  margin-left: auto;
+}
+.room-tag-pill.friends { background: rgba(124,106,247,0.2); color: var(--p2); border: 1px solid rgba(124,106,247,0.3); }
+.room-tag-pill.chat { background: rgba(34,211,160,0.15); color: var(--green); border: 1px solid rgba(34,211,160,0.25); }
+
+.room-avatars-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 8px;
+}
+.r-ava {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--surface3);
+  border: 2px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  margin-left: -8px;
+  position: relative;
+}
+.r-ava:first-child { margin-left: 0; }
+.r-ava-flag {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  font-size: 9px;
+}
+.r-ava-count {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--surface3);
+  border: 2px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text2);
+  margin-left: -8px;
+}
+.room-name-text {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.4;
+}
+
+/* ══════════════════════════════════
+   SCREEN 5: LIVE VOICE ROOM
+══════════════════════════════════ */
+.s-liveroom {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.room-bg-full {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, #0E0B28 0%, #07101F 60%, #050C18 100%);
+}
+.room-bg-glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(124,106,247,0.25) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(244,114,182,0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(45,212,191,0.08) 0%, transparent 35%);
+}
+.room-cityscape {
+  position: absolute;
+  bottom: 64px; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(0deg, rgba(5,12,24,0.9) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 10px;
+  overflow: hidden;
+}
+.city-building {
+  background: rgba(20,30,55,0.8);
+  border: 1px solid rgba(100,120,180,0.1);
+  border-bottom: none;
+  flex-shrink: 0;
+}
+.city-windows {
+  position: absolute; inset: 4px 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+.city-win { background: rgba(255,200,50,0.15); border-radius: 1px; }
+.city-win.lit { background: rgba(255,200,50,0.5); }
+
+.room-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.room-header {
+  padding: 6px 14px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.room-close-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+.room-title-area { flex: 1; }
+.room-title-text {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.room-title-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.room-listener-count {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text2);
+}
+.room-power-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Speaker grid */
+.speaker-grid {
+  padding: 6px 14px 14px;
+}
+.speaker-row-host {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.speaker-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+.spk-ring {
+  border-radius: 50%;
+  padding: 2.5px;
+  position: relative;
+}
+.spk-ring.speaking {
+  background: linear-gradient(135deg, var(--p), var(--pink));
+  animation: ringPulse 1.8s infinite;
+}
+@keyframes ringPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(124,106,247,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(124,106,247,0); }
+}
+.spk-ring.quiet { background: var(--border); }
+.spk-ring.lg { width: 72px; height: 72px; }
+.spk-ring.md { width: 56px; height: 56px; }
+.spk-ring.sm { width: 48px; height: 48px; }
+.spk-ava {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2.5px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+.spk-ava.lg { font-size: 28px; }
+.spk-ava.md { font-size: 22px; }
+.spk-ava.sm { font-size: 18px; }
+.spk-host-badge {
+  position: absolute;
+  bottom: -6px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, #F59E0B, #FB923C);
+  border-radius: 50px;
+  padding: 1px 7px;
+  font-size: 8px;
+  font-weight: 800;
+  color: white;
+  white-space: nowrap;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.spk-name {
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.spk-muted { font-size: 10px; text-align: center; }
+
+.speaker-slots-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+/* Chat & audience strip */
+.room-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 14px 10px; }
+
+/* Chat messages */
+.room-chat-area {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 0 12px 6px;
+  scrollbar-width: none;
+  position: relative;
+}
+.room-chat-area::-webkit-scrollbar { display: none; }
+
+.rc-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+.rc-ava {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--surface2);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.rc-bubble {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px 12px 12px 2px;
+  padding: 6px 10px;
+  max-width: 80%;
+}
+.rc-name {
+  font-size: 9.5px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--p2);
+  margin-bottom: 2px;
+}
+.rc-text { font-size: 11px; color: var(--text2); line-height: 1.4; }
+.rc-translate { font-size: 16px; cursor: pointer; margin-top: 4px; color: var(--text3); }
+
+/* System announcement */
+.room-announce {
+  background: rgba(34,211,160,0.08);
+  border: 1px solid rgba(34,211,160,0.15);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: var(--teal);
+  line-height: 1.5;
+  margin: 0 4px 8px;
+}
+
+/* Floating reactions */
+.float-emojis {
+  position: absolute;
+  right: 10px;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+.fe {
+  font-size: 20px;
+  animation: floatEmoji 3s ease-out forwards;
+}
+@keyframes floatEmoji {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
+}
+
+/* Shop button */
+.room-shop-btn {
+  position: absolute;
+  right: 14px;
+  bottom: 90px;
+  background: linear-gradient(135deg, var(--p), var(--pink));
+  border-radius: 14px;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  box-shadow: 0 4px 16px rgba(124,106,247,0.4);
+  z-index: 5;
+}
+.room-request-btn {
+  position: absolute;
+  right: 14px;
+  bottom: 148px;
+  background: rgba(124,106,247,0.2);
+  border: 1px solid rgba(124,106,247,0.4);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Bottom toolbar */
+.room-toolbar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 8px 14px 14px;
+  background: linear-gradient(0deg, rgba(5,8,20,1) 0%, rgba(5,8,20,0.8) 100%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+.room-comment-input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 22px;
+  padding: 8px 14px;
+  font-size: 11px;
+  color: var(--text3);
+  cursor: pointer;
+}
+.room-tb-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.room-tb-btn.cc { background: rgba(124,106,247,0.2); }
+.room-tb-btn.gift { background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(251,146,60,0.3)); }
+
+/* ══════════════════════════════════
+   SCREEN 6: SETTINGS / MORE
+══════════════════════════════════ */
+.s-settings {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.settings-header {
+  padding: 4px 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.settings-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+}
+.settings-close {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+.settings-list {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 0 14px 20px;
+  scrollbar-width: none;
+}
+.settings-list::-webkit-scrollbar { display: none; }
+.settings-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 3px;
+}
+.settings-item:hover { background: var(--surface2); }
+.si-icon {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.si-icon.wallet { background: rgba(34,211,160,0.15); }
+.si-icon.account { background: rgba(124,106,247,0.15); }
+.si-icon.language { background: rgba(45,212,191,0.15); }
+.si-icon.dress { background: rgba(244,114,182,0.15); }
+.si-icon.about { background: rgba(251,146,60,0.15); }
+.si-icon.block { background: rgba(248,113,113,0.15); }
+.si-icon.feedback { background: rgba(245,158,11,0.15); }
+.si-icon.cache { background: rgba(100,116,139,0.15); }
+.si-info { flex: 1; }
+.si-name {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.si-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.si-arrow { color: var(--text3); font-size: 16px; }
+.si-value { font-size: 11px; color: var(--text3); }
+
+/* ══════════════════════════════════
+   SCREEN 7: LEARN
+══════════════════════════════════ */
+.s-learn {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.learn-header {
+  padding: 4px 16px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.learn-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.learn-right { display: flex; gap: 8px; align-items: center; }
+.lang-switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text2);
+  cursor: pointer;
+}
+.learn-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border2);
+  margin: 0 16px;
+  margin-bottom: 16px;
+}
+.learn-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text3);
+  cursor: pointer;
+  position: relative;
+}
+.learn-tab.active { color: var(--text); }
+.learn-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 20%; right: 20%;
+  height: 2px;
+  background: var(--p);
+  border-radius: 2px;
+}
+
+.learn-content {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 0 16px 64px;
+  scrollbar-width: none;
+}
+.learn-content::-webkit-scrollbar { display: none; }
+
+.quote-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.quote-icon { font-size: 28px; opacity: 0.5; flex-shrink: 0; }
+.quote-text { font-size: 12px; color: var(--text2); line-height: 1.6; font-style: italic; }
+.quote-sub { font-size: 10px; color: var(--text3); margin-top: 4px; }
+
+.learning-path-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.lp-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 800; }
+.lp-level {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--p2);
+  cursor: pointer;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.path-items { display: flex; flex-direction: column; }
+.path-item { display: flex; gap: 12px; }
+.path-line-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 20px;
+  flex-shrink: 0;
+}
+.path-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 14px;
+}
+.path-dot.done { background: var(--green); border-color: var(--green); }
+.path-dot.next { border-color: var(--p); }
+.path-connector { flex: 1; width: 2px; background: var(--border2); margin: 2px 0; min-height: 16px; }
+
+.path-card {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.path-card:hover { border-color: var(--p); }
+.path-card-info { flex: 1; }
+.path-card-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.path-card-desc { font-size: 11px; color: var(--text3); }
+.path-card-img {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  position: relative;
+  flex-shrink: 0;
+}
+.path-card-time {
+  position: absolute;
+  bottom: 3px; right: 3px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 6px;
+  padding: 1px 5px;
+  font-size: 8px;
+  font-weight: 700;
+  color: white;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.stars { font-size: 11px; }
+
+.view-path-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 9px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--text2);
+  text-align: center;
+  cursor: pointer;
+  margin: 4px 0 20px;
+}
+
+.scenario-section { margin-top: 4px; }
+.scenario-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+.scenario-cards {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.scenario-cards::-webkit-scrollbar { display: none; }
+.scenario-card {
+  flex-shrink: 0;
+  width: 110px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.sc-img {
+  height: 80px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.sc-info { padding: 8px; }
+.sc-title { font-size: 10px; font-weight: 700; font-family: 'Bricolage Grotesque', sans-serif; margin-bottom: 2px; }
+.sc-duration { font-size: 9px; color: var(--text3); }
+
+/* ─── LEAVE ROOM MODAL ─── */
+.s-modal-overlay {
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.modal-blurred-bg {
+  position: absolute; inset: 0;
+  opacity: 0.4;
+}
+.modal-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.modal-action-row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px 20px 30px;
+}
+.modal-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.modal-action-btn {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.modal-action-btn.leave { background: linear-gradient(135deg, var(--pink), var(--red)); }
+.modal-action-btn.minimize { background: white; }
+.modal-action-label { font-size: 12px; color: white; font-weight: 600; font-family: 'Bricolage Grotesque', sans-serif; }
+
+.recommended-section { padding: 0 16px; }
+.rec-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+/* ─── COLOR PALETTE ─── */
+.palette-section {
+  max-width: 1500px;
+  margin: 20px auto 60px;
+  padding: 0 40px;
+}
+.palette-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.palette-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.swatch { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.sw-circle { width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.08); }
+.sw-name { font-size: 9px; color: var(--text3); font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; }
+
+/* ─── FOOTER ─── */
+.page-footer {
+  text-align: center;
+  padding: 30px 20px 50px;
+  border-top: 1px solid var(--border2);
+  color: var(--text3);
+  font-size: 11px;
+  max-width: 1500px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+.page-footer strong { color: var(--p2); font-family: 'Bricolage Grotesque', sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<div class="page-header">
+  <div class="app-logo">
+    <div class="logo-glow">🗣️</div>
+    <span>Talkin</span>
+  </div>
+  <h1>Full App UI<br><em>Design System</em></h1>
+  <p>Merged & upgraded concept based on your reference screens — cleaner layout, stronger visual identity, same core features.</p>
+</div>
+
+<!-- ═══ ROW 1: SOCIAL + PROFILE ═══ -->
+<div class="section-divider">
+  <div class="divider-label">Social & Identity</div>
+  <div class="divider-line"></div>
+  <div class="divider-badge">Screens 01–02</div>
+</div>
+<div class="screens-grid">
+
+  <!-- S1: MOMENTS / FEED -->
+  <div class="screen-wrap">
+    <div class="screen-num">01 — Moments Feed</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div class="s-feed">
+          <div class="sb"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="feed-top-bar">
+            <div class="feed-tab active">Image</div>
+            <div class="feed-tab">Videos</div>
+            <div class="feed-right">
+              <div class="icon-btn">🔔<div class="bn-dot"></div></div>
+              <div class="icon-btn">📷</div>
+            </div>
+          </div>
+          <div class="feed-filter-row">
+            <div class="filter-chip on">✨ For You</div>
+            <div class="filter-chip">🕐 Recent</div>
+            <div class="filter-chip">👥 Follow</div>
+            <div class="filter-chip">🌄 Scenery</div>
+            <div class="filter-chip">🤝 Social</div>
+          </div>
+          <div class="feed-content">
+            <div class="feed-post">
+              <div class="post-user-row">
+                <div class="post-ava">👩🏼<div class="post-ava-flag">🇬🇧</div></div>
+                <div class="post-user-info">
+                  <div class="post-uname">Jane <div class="vip-tag">VIP</div></div>
+                  <div class="post-langs">
+                    <div class="lang-badge en">EN</div>
+                    <span style="color:var(--text3);font-size:10px;">⇄</span>
+                    <div class="lang-badge tl">TL</div>
+                    <div class="translate-btn">🔃 Translate</div>
+                  </div>
+                </div>
+                <div class="post-follow-btn">+ Follow</div>
+              </div>
+              <div class="post-text">Rate me! i wanna know how you guys think how good i look like 😛😊</div>
+              <div class="post-imgs">
+                <div class="post-img">🌸</div>
+                <div class="post-img">☀️</div>
+                <div class="post-img">🌺</div>
+                <div class="post-img">✨</div>
+              </div>
+              <div class="post-actions-row">
+                <div class="post-act liked"><div class="post-act-icon">❤️</div> 901</div>
+                <div class="post-act"><div class="post-act-icon">💬</div> 151</div>
+                <div class="post-act"><div class="post-act-icon">✅</div></div>
+                <div class="post-save">🔖</div>
+              </div>
+            </div>
+            <div style="padding:8px 16px 4px;font-size:10px;color:var(--text3);">
+              <b style="color:var(--p2);">AYATul:</b> Hi can you like my post
+            </div>
+            <div style="padding:0 16px 12px;font-size:10px;color:var(--text3);">
+              <b style="color:var(--p2);">Wordlyra🌸:</b> Hi, could you please like my latest posts?
+            </div>
+            <div class="feed-post">
+              <div class="post-user-row">
+                <div class="post-ava">👨🏽<div class="post-ava-flag">🇧🇷</div></div>
+                <div class="post-user-info">
+                  <div class="post-uname">Carlos M.</div>
+                  <div class="post-langs">
+                    <div class="lang-badge en">EN</div>
+                    <div class="translate-btn">🔃 Translate</div>
+                  </div>
+                </div>
+                <div class="post-follow-btn">Following</div>
+              </div>
+              <div class="post-text">Beautiful sunset here in São Paulo 🌅 who else is watching the sky tonight?</div>
+              <div class="post-imgs">
+                <div class="post-img" style="grid-column:1/-1;height:90px;">🌅</div>
+              </div>
+              <div class="post-actions-row">
+                <div class="post-act"><div class="post-act-icon">🤍</div> 234</div>
+                <div class="post-act"><div class="post-act-icon">💬</div> 18</div>
+                <div class="post-save">🔖</div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="bn active"><div class="bn-ic">🏠</div><div class="bn-lb">Home</div></div>
+            <div class="bn"><div class="bn-ic">👥</div><div class="bn-lb">Match</div></div>
+            <div class="bn"><div class="bn-ic">💬</div><div class="bn-lb">Chat</div></div>
+            <div class="bn"><div class="bn-ic">🎙️</div><div class="bn-lb">Party</div></div>
+            <div class="bn"><div class="bn-ic">😊</div><div class="bn-lb">Learn</div></div>
+            <div class="bn"><div class="bn-ic" style="background:rgba(124,106,247,0.15);border-radius:50%;padding:0;overflow:hidden;font-size:14px;">🌐</div><div class="bn-lb" style="color:var(--p2);">+</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2: PROFILE -->
+  <div class="screen-wrap">
+    <div class="screen-num">02 — User Profile</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;background:var(--bg);">
+          <div class="sb" style="position:absolute;top:0;left:0;right:0;z-index:5;"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="s-profile">
+            <div style="height:28px;"></div>
+            <div class="profile-hero">
+              <div class="profile-hero-dots"></div>
+              <div class="profile-edit-btn">✏️ Edit</div>
+            </div>
+            <div class="profile-ava-area">
+              <div class="profile-ava-ring">
+                <div class="profile-ava-inner">🇧🇩</div>
+              </div>
+              <div class="profile-actions-top">
+                <div class="p-msg-btn">💬 Message</div>
+                <div class="p-gift-btn">🎁</div>
+              </div>
+            </div>
+            <div class="profile-name-row">
+              <div class="profile-name">Adrian Kevin</div>
+              <div class="gender-icon">♂️</div>
+              <div class="vip-tag">VIP</div>
+            </div>
+            <div class="profile-handle">@talkin_urkzb &nbsp;·&nbsp; 📍 Dhaka, BD</div>
+            <div class="profile-langs-row">
+              <div class="flag-pill">🇺🇸 EN</div>
+              <span style="color:var(--text3);font-size:14px;">⇄</span>
+              <div class="flag-pill">AR</div>
+            </div>
+            <div class="review-gift-bar">
+              <div class="rg-card">
+                <div class="rg-icon">❝</div>
+                <div><div class="rg-info-num">0</div><div class="rg-info-label">Reviews</div></div>
+              </div>
+              <div class="rg-card">
+                <div class="rg-icon">🎁</div>
+                <div><div class="rg-info-num">0</div><div class="rg-info-label">Gifts recv.</div></div>
+              </div>
+            </div>
+            <div class="profile-stats-bar">
+              <div class="pstat"><div class="pstat-num">17</div><div class="pstat-label">Following</div></div>
+              <div class="pstat">
+                <div class="pstat-num">9 <span class="pstat-notif">8</span></div>
+                <div class="pstat-label">Followers</div>
+              </div>
+              <div class="pstat"><div class="pstat-num">8</div><div class="pstat-label">Moments</div></div>
+              <div class="pstat">
+                <div class="pstat-num" style="font-size:11px;">
+                  <span style="font-size:16px;">👥</span>
+                </div>
+                <div class="pstat-label">Visitors</div>
+              </div>
+            </div>
+            <div class="pintro-section">
+              <div class="psec-title">Introduction</div>
+              <div class="pintro-box">😍 Looking forward to your introduction &rsaquo;</div>
+            </div>
+            <div class="ptags-section">
+              <div class="psec-title">Tags</div>
+              <div class="ptags-wrap">
+                <div class="ptag">🎓 Student</div>
+                <div class="ptag">🎓 Bachelor</div>
+                <div class="ptag">🐱 Cat</div>
+                <div class="ptag">🐦 Bird</div>
+                <div class="ptag">⚽ Soccer</div>
+                <div class="ptag">💝 Romance</div>
+              </div>
+            </div>
+            <div class="ptags-section">
+              <div class="psec-title">Reviews</div>
+              <div class="preview-empty">
+                <div class="preview-empty-icon">❝</div>
+                <div class="preview-empty-text">😢 No one has reviewed you yet</div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="bn"><div class="bn-ic">🏠</div><div class="bn-lb">Home</div></div>
+            <div class="bn"><div class="bn-ic">👥</div><div class="bn-lb">Match</div></div>
+            <div class="bn"><div class="bn-ic">💬</div><div class="bn-lb">Chat</div></div>
+            <div class="bn"><div class="bn-ic">🎙️</div><div class="bn-lb">Party</div></div>
+            <div class="bn active"><div class="bn-ic">😊</div><div class="bn-lb">Learn</div></div>
+            <div class="bn"><div class="bn-ic">🌐</div><div class="bn-lb">More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: MESSAGES -->
+  <div class="screen-wrap">
+    <div class="screen-num">03 — Messages</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;background:var(--bg);">
+          <div class="sb"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="s-messages">
+            <div class="msg-header">
+              <div class="msg-title">Messages</div>
+              <div class="msg-new-btn">✏️</div>
+            </div>
+            <div class="msg-search">
+              <span>🔍</span>
+              <input placeholder="Search User / Chat..." />
+            </div>
+            <div class="rv-section">
+              <div class="rv-header">
+                <div class="rv-title">Recently visited you</div>
+                <div class="rv-close">✕</div>
+              </div>
+              <div class="rv-cards">
+                <div class="rv-card">
+                  <div class="rv-card-bg">🧑</div>
+                  <div class="rv-card-flag">🇸🇦</div>
+                  <div class="rv-card-gender m">♂</div>
+                </div>
+                <div class="rv-card">
+                  <div class="rv-card-bg">👩</div>
+                  <div class="rv-card-flag">🇺🇸</div>
+                  <div class="rv-card-gender lnk">🔗</div>
+                </div>
+                <div class="rv-card">
+                  <div class="rv-card-bg">👤</div>
+                  <div class="rv-card-flag">🇵🇭</div>
+                  <div class="rv-card-gender lnk">🔗</div>
+                </div>
+                <div class="rv-card">
+                  <div class="rv-card-bg">👩</div>
+                  <div class="rv-card-flag">🇮🇩</div>
+                  <div class="rv-card-gender f">♀</div>
+                </div>
+              </div>
+            </div>
+            <div class="msg-list">
+              <div class="msg-list-title">Messages</div>
+              <div class="msg-item">
+                <div class="mi-ava">🐶<div class="mi-flag">🇧🇩</div><div class="mi-online"></div></div>
+                <div class="mi-info">
+                  <div class="mi-name">Zara</div>
+                  <div class="mi-preview">Hi! Come join my voice chat room and...</div>
+                </div>
+                <div class="mi-meta"><div class="mi-time">02/27</div><div class="mi-badge">2</div></div>
+              </div>
+              <div class="msg-item">
+                <div class="mi-ava">👧<div class="mi-flag">🇷🇴</div></div>
+                <div class="mi-info">
+                  <div class="mi-name">just a girl</div>
+                  <div class="mi-preview">hi</div>
+                </div>
+                <div class="mi-meta"><div class="mi-time">02/27</div></div>
+              </div>
+              <div class="msg-item">
+                <div class="mi-ava">🧕<div class="mi-flag">🇩🇿</div></div>
+                <div class="mi-info">
+                  <div class="mi-name">liil</div>
+                  <div class="mi-preview">You have unlocked New Friend Interac...</div>
+                </div>
+                <div class="mi-meta"><div class="mi-time">02/26</div></div>
+              </div>
+              <div class="msg-item">
+                <div class="mi-ava">👩‍🦱<div class="mi-flag">🇷🇴</div></div>
+                <div class="mi-info">
+                  <div class="mi-name">Alexandra</div>
+                  <div class="mi-preview">Hi! Come join my voice chat room and...</div>
+                </div>
+                <div class="mi-meta"><div class="mi-time">02/26</div></div>
+              </div>
+              <div class="msg-item">
+                <div class="mi-ava">🧑<div class="mi-flag">🇧🇩</div></div>
+                <div class="mi-info">
+                  <div class="mi-name">Shimul</div>
+                  <div class="mi-preview">Hi! Come join my voice chat room and...</div>
+                </div>
+                <div class="mi-meta"><div class="mi-time">02/26</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="bn"><div class="bn-ic">🏠</div><div class="bn-lb">Home</div></div>
+            <div class="bn"><div class="bn-ic">👥</div><div class="bn-lb">Match</div></div>
+            <div class="bn active"><div class="bn-ic">💬</div><div class="bn-lb">Chat</div></div>
+            <div class="bn"><div class="bn-ic">🎙️</div><div class="bn-lb">Party</div></div>
+            <div class="bn"><div class="bn-ic">😊</div><div class="bn-lb">Learn</div></div>
+            <div class="bn"><div class="bn-ic">🌐</div><div class="bn-lb">More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ROW 2: PARTY + LIVE ROOM ═══ -->
+<div class="section-divider">
+  <div class="divider-label">Voice Rooms</div>
+  <div class="divider-line"></div>
+  <div class="divider-badge">Screens 04–06</div>
+</div>
+<div class="screens-grid">
+
+  <!-- S4: PARTY LIST -->
+  <div class="screen-wrap">
+    <div class="screen-num">04 — Party (Room List)</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;background:var(--bg);">
+          <div class="sb"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="s-party">
+            <div class="party-header">
+              <div class="party-title">Party</div>
+              <div class="party-actions">
+                <div class="trophy-btn">🏆</div>
+                <div class="new-room-btn">🎙️ + New</div>
+              </div>
+            </div>
+            <div class="friends-in-rooms">
+              <div class="fir-title">Friends in rooms</div>
+              <div class="fir-row">
+                <div class="fir-item">
+                  <div class="fir-ring">
+                    <div class="fir-inner">🦊<div class="fir-vip">VIP</div></div>
+                  </div>
+                  <div class="fir-name">Luna</div>
+                </div>
+                <div class="fir-item">
+                  <div class="fir-ring">
+                    <div class="fir-inner">🐱<div class="fir-vip">VIP</div></div>
+                  </div>
+                  <div class="fir-name">Thea🌸</div>
+                </div>
+              </div>
+            </div>
+            <div class="lang-filter-row">
+              <div class="lf-chip active">All</div>
+              <div class="lf-chip">BN</div>
+              <div class="lf-chip">EN</div>
+              <div class="lf-chip">AR</div>
+              <div class="lf-menu">≡</div>
+            </div>
+            <div class="rooms-list-scroll">
+              <div class="room-card" style="background:linear-gradient(135deg, rgba(124,106,247,0.08), rgba(30,40,70,1));">
+                <div class="room-card-content">
+                  <div class="room-top-row">
+                    <div class="room-signal">📶</div>
+                    <div class="room-langs">
+                      <div class="room-lang-tag ar">AR</div>
+                      <div class="room-lang-tag en">EN</div>
+                    </div>
+                  </div>
+                  <div class="room-avatars-row">
+                    <div class="r-ava">😎<div class="r-ava-flag">🇮🇶</div></div>
+                    <div class="r-ava">🌸<div class="r-ava-flag">🇸🇾</div></div>
+                    <div class="r-ava">🎭<div class="r-ava-flag">🇵🇰</div></div>
+                    <div class="r-ava">🌹<div class="r-ava-flag">🇮🇩</div></div>
+                    <div class="r-ava">😊<div class="r-ava-flag">🇮🇳</div></div>
+                    <div class="r-ava-count">+</div>
+                  </div>
+                  <div class="room-name-text">لو علمت جهلك لا ستحقرت علمك 💙</div>
+                </div>
+              </div>
+              <div class="room-card" style="background:linear-gradient(135deg, rgba(251,146,60,0.06), rgba(20,30,50,1));">
+                <div class="room-card-content">
+                  <div class="room-top-row">
+                    <div class="room-signal">📶</div>
+                    <div class="room-langs">
+                      <div class="room-lang-tag ar">AR</div>
+                      <div class="room-lang-tag en">EN</div>
+                    </div>
+                    <div class="room-tag-pill friends">🤝 Make Friends</div>
+                  </div>
+                  <div class="room-avatars-row">
+                    <div class="r-ava">🧕<div class="r-ava-flag">🇮🇶</div></div>
+                    <div class="r-ava">🧑<div class="r-ava-flag">🇵🇰</div></div>
+                    <div class="r-ava">👤<div class="r-ava-flag">🇵🇰</div></div>
+                    <div class="r-ava">😊<div class="r-ava-flag">🇸🇦</div></div>
+                    <div class="r-ava">👩<div class="r-ava-flag">🇺🇸</div></div>
+                    <div class="r-ava-count">+</div>
+                  </div>
+                  <div class="room-name-text">Achi lagti ho Ap 🤝</div>
+                </div>
+              </div>
+              <div class="room-card" style="background:linear-gradient(135deg, rgba(34,211,160,0.06), rgba(15,25,45,1));">
+                <div class="room-card-content">
+                  <div class="room-top-row">
+                    <div class="room-signal">📶</div>
+                    <div class="room-langs">
+                      <div class="room-lang-tag en">EN</div>
+                      <div class="room-lang-tag ar">AR</div>
+                    </div>
+                    <div class="room-tag-pill chat">💬 Chat</div>
+                  </div>
+                  <div class="room-avatars-row">
+                    <div class="r-ava">😶<div class="r-ava-flag">🇸🇾</div></div>
+                    <div class="r-ava">👤<div class="r-ava-flag">🇸🇾</div></div>
+                    <div class="r-ava-count">+</div>
+                  </div>
+                  <div class="room-name-text">Arabic learning community 🌙</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="bn"><div class="bn-ic">🏠</div><div class="bn-lb">Home</div></div>
+            <div class="bn"><div class="bn-ic">👥</div><div class="bn-lb">Match</div></div>
+            <div class="bn"><div class="bn-ic">💬</div><div class="bn-lb">Chat</div></div>
+            <div class="bn active"><div class="bn-ic">🎙️</div><div class="bn-lb">Party</div></div>
+            <div class="bn"><div class="bn-ic">😊</div><div class="bn-lb">Learn</div></div>
+            <div class="bn"><div class="bn-ic">🌐</div><div class="bn-lb">More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5: LIVE ROOM -->
+  <div class="screen-wrap">
+    <div class="screen-num">05 — Live Voice Room</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div class="s-liveroom">
+          <div class="room-bg-full"></div>
+          <div class="room-bg-glow"></div>
+          <!-- cityscape -->
+          <div class="room-cityscape">
+            <div class="city-building" style="width:18px;height:50px;position:relative;"><div class="city-windows"><div class="city-win lit"></div><div class="city-win"></div><div class="city-win lit"></div><div class="city-win lit"></div></div></div>
+            <div class="city-building" style="width:22px;height:75px;position:relative;"><div class="city-windows"><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div></div></div>
+            <div class="city-building" style="width:16px;height:40px;position:relative;"></div>
+            <div class="city-building" style="width:28px;height:90px;position:relative;"><div class="city-windows"><div class="city-win lit"></div><div class="city-win"></div><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div></div></div>
+            <div class="city-building" style="width:14px;height:55px;"></div>
+            <div class="city-building" style="width:20px;height:68px;position:relative;"><div class="city-windows"><div class="city-win"></div><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div></div></div>
+            <div class="city-building" style="width:30px;height:85px;"></div>
+            <div class="city-building" style="width:16px;height:45px;"></div>
+            <div class="city-building" style="width:24px;height:70px;position:relative;"><div class="city-windows"><div class="city-win lit"></div><div class="city-win lit"></div><div class="city-win"></div><div class="city-win lit"></div></div></div>
+          </div>
+
+          <div class="room-content">
+            <div class="sb" style="position:relative;z-index:3;"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+            <div class="room-header">
+              <div class="room-close-btn">✕</div>
+              <div class="room-title-area">
+                <div class="room-title-text">love quarrels in the comments</div>
+                <div class="room-title-sub">
+                  <div class="flag-pill" style="padding:1px 6px;font-size:9px;background:rgba(255,255,255,0.07);">EN</div>
+                  <div class="flag-pill" style="padding:1px 6px;font-size:9px;background:rgba(255,255,255,0.07);"># Music</div>
+                  <div class="room-listener-count">👂 48</div>
+                </div>
+              </div>
+              <div class="room-power-btn">⏻</div>
+            </div>
+
+            <!-- Speakers -->
+            <div class="speaker-grid">
+              <div class="speaker-row-host">
+                <div class="speaker-slot">
+                  <div class="spk-ring lg speaking">
+                    <div class="spk-ava lg">🇵🇭</div>
+                  </div>
+                  <div class="spk-host-badge">👑 HOST</div>
+                  <div style="margin-top:10px;"></div>
+                  <div class="spk-name">Nyunyur</div>
+                  <div class="spk-muted">🔊</div>
+                </div>
+              </div>
+              <div class="speaker-slots-row">
+                <div class="speaker-slot">
+                  <div class="spk-ring sm speaking"><div class="spk-ava sm">🇵🇭</div></div>
+                  <div class="spk-name" style="margin-top:4px;">Si_Raulo</div>
+                  <div class="spk-muted">🔇</div>
+                </div>
+                <div class="speaker-slot">
+                  <div class="spk-ring sm speaking"><div class="spk-ava sm">🇵🇭</div></div>
+                  <div class="spk-name" style="margin-top:4px;">kangiee</div>
+                  <div class="spk-muted">🔊</div>
+                </div>
+                <div class="speaker-slot">
+                  <div class="spk-ring sm quiet"><div class="spk-ava sm">🇵🇭</div></div>
+                  <div class="spk-name" style="margin-top:4px;">Bold ni..</div>
+                  <div class="spk-muted">🔇</div>
+                </div>
+                <div class="speaker-slot">
+                  <div class="spk-ring sm quiet"><div class="spk-ava sm">🇵🇭</div></div>
+                  <div class="spk-name" style="margin-top:4px;">Thea🌸</div>
+                  <div class="spk-muted">🔇</div>
+                </div>
+                <div class="speaker-slot">
+                  <div class="spk-ring sm quiet" style="border:1.5px dashed rgba(255,255,255,0.15);background:none;"><div class="spk-ava sm" style="font-size:16px;color:var(--text3);">+</div></div>
+                  <div class="spk-name" style="margin-top:4px;color:var(--text3);">slot</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="room-divider"></div>
+
+            <!-- Chat messages -->
+            <div class="room-chat-area">
+              <div class="room-announce">
+                🛡️ Welcome! Platform strictly prohibits illegal, vulgar, or harmful content. Please follow room guidelines.
+              </div>
+              <div class="rc-msg">
+                <div class="rc-ava">🇵🇭</div>
+                <div class="rc-bubble">
+                  <div class="rc-name">kangiee</div>
+                  <div class="rc-text">Si akira to</div>
+                </div>
+                <div class="rc-translate">🔃</div>
+              </div>
+              <div class="rc-msg">
+                <div class="rc-ava">🌟</div>
+                <div class="rc-bubble">
+                  <div class="rc-name">✦MAE</div>
+                  <div class="rc-text">BYEEE NA 👋</div>
+                </div>
+                <div class="rc-translate">🔃</div>
+              </div>
+              <div class="rc-msg">
+                <div class="rc-ava">🇵🇭</div>
+                <div class="rc-bubble" style="background:rgba(124,106,247,0.12);border:1px solid rgba(124,106,247,0.2);">
+                  <div class="rc-name" style="color:var(--p2);">Nyunyur</div>
+                  <div class="rc-text">Enco<br/>yes</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating emojis -->
+            <div class="float-emojis">
+              <div class="fe" style="animation-delay:0s;">🔥</div>
+              <div class="fe" style="animation-delay:0.8s;">❤️</div>
+              <div class="fe" style="animation-delay:1.6s;">👏</div>
+            </div>
+
+            <!-- Shop & request btns -->
+            <div class="room-shop-btn">🎁<span style="font-size:8px;">SHOP</span></div>
+            <div class="room-request-btn">🙋</div>
+
+            <!-- Toolbar -->
+            <div class="room-toolbar">
+              <div class="room-comment-input">Comment...</div>
+              <div class="room-tb-btn">😊</div>
+              <div class="room-tb-btn cc">CC</div>
+              <div class="room-tb-btn gift">🎁</div>
+              <div class="room-tb-btn">⋯</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6: LEAVE ROOM MODAL -->
+  <div class="screen-wrap">
+    <div class="screen-num">06 — Leave Room / Recommended</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;">
+          <!-- blurred bg -->
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0E0B28,#07101F);opacity:0.5;"></div>
+          <div style="position:absolute;inset:0;backdrop-filter:blur(12px);background:rgba(0,0,0,0.55);z-index:1;"></div>
+          <div class="sb" style="position:absolute;top:0;left:0;right:0;z-index:5;color:white;"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;">
+            <div style="height:34px;"></div>
+            <!-- Action row -->
+            <div class="modal-action-row">
+              <div class="modal-action">
+                <div class="modal-action-btn leave">⏻</div>
+                <div class="modal-action-label">Leave room</div>
+              </div>
+              <div class="modal-action">
+                <div class="modal-action-btn minimize">⤡</div>
+                <div class="modal-action-label" style="color:var(--text2);">Minimize</div>
+              </div>
+            </div>
+            <!-- Recommended rooms -->
+            <div class="recommended-section">
+              <div class="rec-title">Recommended room</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="room-card" style="background:rgba(20,28,50,0.95);">
+                  <div class="room-card-content">
+                    <div class="room-top-row">
+                      <div class="room-signal">📶</div>
+                      <div class="room-langs"><div class="room-lang-tag ar">AR</div><div class="room-lang-tag en">EN</div></div>
+                    </div>
+                    <div class="room-avatars-row">
+                      <div class="r-ava">😎<div class="r-ava-flag">🇮🇶</div></div>
+                      <div class="r-ava">🌸<div class="r-ava-flag">🇸🇾</div></div>
+                      <div class="r-ava">🎭<div class="r-ava-flag">🇵🇰</div></div>
+                      <div class="r-ava">🌹<div class="r-ava-flag">🇮🇩</div></div>
+                      <div class="r-ava-count">5</div>
+                    </div>
+                    <div class="room-name-text">لو علمت جهلك لا ستحقرت علمك 💙</div>
+                  </div>
+                </div>
+                <div class="room-card" style="background:rgba(20,28,50,0.95);">
+                  <div class="room-card-content">
+                    <div class="room-top-row">
+                      <div class="room-signal">📶</div>
+                      <div class="room-langs"><div class="room-lang-tag en">EN</div><div class="room-lang-tag ar">AR</div></div>
+                      <div class="room-tag-pill friends">🤝 Make Friends</div>
+                    </div>
+                    <div class="room-avatars-row">
+                      <div class="r-ava">🧕<div class="r-ava-flag">🇮🇶</div></div>
+                      <div class="r-ava">🧑<div class="r-ava-flag">🇵🇰</div></div>
+                      <div class="r-ava-count">6</div>
+                    </div>
+                    <div class="room-name-text">Achi lagti ho Ap 🤝</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ROW 3: LEARN + SETTINGS ═══ -->
+<div class="section-divider">
+  <div class="divider-label">Learning & Settings</div>
+  <div class="divider-line"></div>
+  <div class="divider-badge">Screens 07–08</div>
+</div>
+<div class="screens-grid">
+
+  <!-- S7: LEARN -->
+  <div class="screen-wrap">
+    <div class="screen-num">07 — Learn (Language Courses)</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;background:var(--bg);">
+          <div class="sb"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="s-learn">
+            <div class="learn-header">
+              <div class="learn-title">Learn</div>
+              <div class="learn-right">
+                <div class="lang-switch-btn">🇺🇸 EN ⇄</div>
+                <div class="icon-btn">⤴️</div>
+              </div>
+            </div>
+            <div class="learn-tabs">
+              <div class="learn-tab active">Courses</div>
+              <div class="learn-tab">Read</div>
+              <div class="learn-tab">Video</div>
+            </div>
+            <div class="learn-content">
+              <div class="quote-card">
+                <div class="quote-icon">❝</div>
+                <div>
+                  <div class="quote-text">Every great journey begins with a single step.</div>
+                  <div class="quote-sub">Every great journey begins with a singl...</div>
+                </div>
+              </div>
+              <div class="learning-path-header">
+                <div class="lp-title">Learning Path</div>
+                <div class="lp-level">Beginner &rsaquo;</div>
+              </div>
+              <div class="path-items">
+                <div class="path-item">
+                  <div class="path-line-col">
+                    <div class="path-dot done">✓</div>
+                    <div class="path-connector"></div>
+                  </div>
+                  <div class="path-card">
+                    <div class="path-card-info">
+                      <div class="path-card-title">Ask for Item Location</div>
+                      <div class="path-card-desc">Where is the clothing section?</div>
+                      <div class="stars">⭐⭐⭐</div>
+                    </div>
+                    <div class="path-card-img">🏪</div>
+                  </div>
+                </div>
+                <div class="path-item">
+                  <div class="path-line-col">
+                    <div class="path-dot next"></div>
+                    <div class="path-connector"></div>
+                  </div>
+                  <div class="path-card">
+                    <div class="path-card-info">
+                      <div class="path-card-title">Greet Colleagues</div>
+                      <div class="path-card-desc">Good morning, how are you today?</div>
+                    </div>
+                    <div class="path-card-img">
+                      🧑‍💼
+                      <div class="path-card-time">7min</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="path-item">
+                  <div class="path-line-col">
+                    <div class="path-dot"></div>
+                  </div>
+                  <div class="path-card">
+                    <div class="path-card-info">
+                      <div class="path-card-title">Order at a Restaurant</div>
+                      <div class="path-card-desc">I would like the menu please</div>
+                    </div>
+                    <div class="path-card-img">
+                      🍽️
+                      <div class="path-card-time">5min</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="view-path-btn">View Full Path</div>
+              <div class="scenario-section">
+                <div class="scenario-title">Scenario Courses</div>
+                <div class="scenario-cards">
+                  <div class="scenario-card">
+                    <div class="sc-img">🛒</div>
+                    <div class="sc-info"><div class="sc-title">Shopping</div><div class="sc-duration">8 lessons</div></div>
+                  </div>
+                  <div class="scenario-card">
+                    <div class="sc-img">✈️</div>
+                    <div class="sc-info"><div class="sc-title">Travel</div><div class="sc-duration">12 lessons</div></div>
+                  </div>
+                  <div class="scenario-card">
+                    <div class="sc-img">💼</div>
+                    <div class="sc-info"><div class="sc-title">Business</div><div class="sc-duration">10 lessons</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="bn"><div class="bn-ic">🏠</div><div class="bn-lb">Home</div></div>
+            <div class="bn"><div class="bn-ic">👥</div><div class="bn-lb">Match</div></div>
+            <div class="bn"><div class="bn-ic">💬</div><div class="bn-lb">Chat</div></div>
+            <div class="bn"><div class="bn-ic">🎙️</div><div class="bn-lb">Party</div></div>
+            <div class="bn active"><div class="bn-ic">😊</div><div class="bn-lb">Learn</div></div>
+            <div class="bn"><div class="bn-ic">🌐</div><div class="bn-lb">More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S8: SETTINGS -->
+  <div class="screen-wrap">
+    <div class="screen-num">08 — More Settings</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="phone-scroll">
+        <div style="height:100%;position:relative;background:var(--bg);">
+          <div class="sb"><span>9:41</span><div class="sb-right">▲ 🔋</div></div>
+          <div class="s-settings">
+            <div class="settings-header">
+              <div class="settings-title">More settings</div>
+              <div class="settings-close">✕</div>
+            </div>
+            <div class="settings-list">
+              <div class="settings-item">
+                <div class="si-icon wallet">💳</div>
+                <div class="si-info">
+                  <div class="si-name">Wallet</div>
+                  <div class="si-sub">Coins, gifts & transactions</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon account">🛡️</div>
+                <div class="si-info">
+                  <div class="si-name">Account Management</div>
+                  <div class="si-sub">Privacy, security & data</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon language">🌐</div>
+                <div class="si-info">
+                  <div class="si-name">Language Settings</div>
+                  <div class="si-sub">App language & translation</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon dress">👕</div>
+                <div class="si-info">
+                  <div class="si-name">Dressing Center</div>
+                  <div class="si-sub">Avatars, frames & themes</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon about">👥</div>
+                <div class="si-info">
+                  <div class="si-name">About Us</div>
+                  <div class="si-sub">Version 2.6.0 · Terms & Privacy</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div style="height:1px;background:var(--border2);margin:8px 0;border-radius:1px;"></div>
+              <div class="settings-item">
+                <div class="si-icon block">🚫</div>
+                <div class="si-info">
+                  <div class="si-name">Block List</div>
+                  <div class="si-sub">Manage blocked users</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon feedback">✏️</div>
+                <div class="si-info">
+                  <div class="si-name">Feedback</div>
+                  <div class="si-sub">Report issues & suggestions</div>
+                </div>
+                <div class="si-arrow">›</div>
+              </div>
+              <div class="settings-item">
+                <div class="si-icon cache">🗑️</div>
+                <div class="si-info">
+                  <div class="si-name">Clear Cache</div>
+                  <div class="si-sub">Free up device storage</div>
+                </div>
+                <div class="si-value">16.3 MB ›</div>
+              </div>
+              <div style="height:24px;"></div>
+              <div style="margin:0 4px;padding:14px;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);border-radius:14px;text-align:center;cursor:pointer;">
+                <div style="font-size:12px;font-weight:700;color:var(--red);font-family:'Bricolage Grotesque',sans-serif;">Sign Out</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- COLOR PALETTE -->
+<div class="section-divider">
+  <div class="divider-label">Design System</div>
+  <div class="divider-line"></div>
+  <div class="divider-badge">Colors & Tokens</div>
+</div>
+<div class="palette-section">
+  <div class="palette-title">Color Palette</div>
+  <div class="palette-row">
+    <div class="swatch"><div class="sw-circle" style="background:#7C6AF7;"></div><div class="sw-name">Primary</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#A99EFF;"></div><div class="sw-name">Accent</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#F472B6;"></div><div class="sw-name">Pink</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#F59E0B;"></div><div class="sw-name">VIP Gold</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#FB923C;"></div><div class="sw-name">Orange</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#22D3A0;"></div><div class="sw-name">Online</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#2DD4BF;"></div><div class="sw-name">Teal</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#F87171;"></div><div class="sw-name">Danger</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#111827;border:1px solid #252F45;"></div><div class="sw-name">Surface</div></div>
+    <div class="swatch"><div class="sw-circle" style="background:#080C14;border:1px solid #252F45;"></div><div class="sw-name">Background</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <strong>TALKIN</strong> — Complete App UI Design System · 8 Screens · Based on Reference Screenshots<br>
+  Stack: Flutter (Mobile) · Laravel 11 API · Sanctum Auth · WebSockets · WebRTC (Audio/Video Calls)<br>
+  Font: Bricolage Grotesque + Plus Jakarta Sans · Color System: Deep Navy Dark Theme
+</div>
+
+</body>
+</html>

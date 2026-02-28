@@ -56,6 +56,9 @@ dependencies:
   flutter_webrtc: ^0.12.0
   permission_handler: ^11.3.1
   audio_session: ^0.1.21
+  agora_rtc_engine: ^6.4.0
+  video_player: ^2.8.1
+  chewie: ^1.7.4
 
 dev_dependencies:
   flutter_test:

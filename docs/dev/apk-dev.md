@@ -50,7 +50,7 @@ This document provides a granular technical roadmap for## Current Status: **Phas
 - [x] **Backend Sync**:
   - [x] Map to `/api/v1/users/*` and `/api/v1/profiles/*`.
 
-## Current Status: **Phase 4 In Progress** 🔄
+## Current Status: **Phase 7 In Progress** 🔄
 
 | Phase | Title | Status |
 |---|---|---|
@@ -58,11 +58,13 @@ This document provides a granular technical roadmap for## Current Status: **Phas
 | Phase 1 | Authentication & Onboarding UX | ✅ Complete |
 | Phase 2 | Profiles & Social Discovery | ✅ Complete |
 | Phase 3 | Real-time Messaging System | ✅ Complete |
-| Phase 4 | WebRTC Voice & Video Calls | 🔄 In Progress |
+| Phase 4 | WebRTC Voice & Video Calls | ✅ Complete |
+| Phase 5 | Voice Rooms & Community | ✅ Complete |
+| Phase 6 | Global Social Feed (Moments) | ✅ Complete |
 
 ---
 
-## 📞 Phase 4: WebRTC Voice & Video Calls
+## 🎙️ Phase 5: Voice Rooms & Community
 **Goal:** Lag-free, rich communication.
 
 - [x] **Chat List**:
@@ -108,17 +110,29 @@ This document provides a granular technical roadmap for## Current Status: **Phas
 ## 🌐 Phase 6: Global Social Feed (Moments)
 **Goal:** Visual window into other cultures.
 
-- **Infinite Feed**:
-  - `CachedNetworkImage` for high-performance media loading.
-  - Video auto-play on scroll using `video_player` + `chewie`.
-- **Post Interactions**:
-  - Instant Translation Toggle (In-place text replacement).
-  - Nested comment threads with @mention support.
-- **Content Creation**:
-  - Multi-media picker (Up to 5 files).
-  - Simple photo filters and text overlays.
-- **Backend Sync**:
-  - Map to `/api/v1/posts/*` and `/api/v1/comments/*`.
+- [x] **Infinite Feed**:
+  - [x] `CachedNetworkImage` for high-performance media loading.
+  - [x] Video auto-play on scroll using `video_player` + `chewie`.
+  - [x] Pull-to-refresh and pagination support.
+- [x] **Post Interactions**:
+  - [x] Instant Translation Toggle (In-place text replacement).
+  - [x] Like/unlike with animation feedback.
+  - [x] Share functionality.
+- [x] **Content Creation**:
+  - [x] Multi-media picker (Up to 5 files).
+  - [x] Photo/video capture from camera.
+  - [x] Gallery selection with preview.
+- [x] **Nested Comments**:
+  - [x] Comment threading with @mention support.
+  - [x] Real-time comment updates.
+  - [x] Like/unlike comments.
+  - [x] Translation toggle for comments.
+- [x] **Backend Sync**:
+  - [x] Map to `/api/v1/posts/*` and `/api/v1/comments/*`.
+  - [x] Real-time WebSocket integration.
+  - [x] Error handling and offline support.
+
+---
 
 ## 🤖 Phase 7: SL (Speech Learning) AI Modules
 **Goal:** Gamified language mastery.

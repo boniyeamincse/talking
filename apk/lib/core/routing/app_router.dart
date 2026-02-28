@@ -10,6 +10,8 @@ import 'package:banitalk/features/chat/presentation/bloc/chat_bloc.dart';
 
 import 'package:banitalk/features/call/presentation/pages/calling_screen.dart';
 import 'package:banitalk/features/call/presentation/bloc/call_bloc.dart';
+import 'package:banitalk/features/social_feed/presentation/pages/social_feed_screen.dart';
+import 'package:banitalk/features/social_feed/presentation/bloc/social_feed_bloc.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -59,6 +61,13 @@ class AppRouter {
             builder: (context, state) => BlocProvider(
               create: (_) => sl<ChatBloc>(),
               child: const ChatListScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/feed',
+            builder: (context, state) => BlocProvider(
+              create: (_) => sl<SocialFeedBloc>(),
+              child: const SocialFeedScreen(),
             ),
           ),
           GoRoute(

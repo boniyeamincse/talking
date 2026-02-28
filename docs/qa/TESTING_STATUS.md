@@ -162,19 +162,19 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 9.1 | List posts (feed) | `GET` | `/posts` | ⬜ | |
-| 9.2 | Create post | `POST` | `/posts` | ⬜ | Body: `{content, visibility}` |
-| 9.3 | View single post | `GET` | `/posts/{id}` | ⬜ | |
-| 9.4 | Upload post media | `POST` | `/posts/{id}/media` | ⬜ | Multipart: `media` file |
-| 9.5 | Like post | `POST` | `/posts/{id}/like` | ⬜ | |
-| 9.6 | Unlike post | `DELETE` | `/posts/{id}/like` | ⬜ | |
-| 9.7 | List post likes | `GET` | `/posts/{id}/likes` | ⬜ | |
-| 9.8 | Add comment | `POST` | `/posts/{id}/comments` | ⬜ | Body: `{body}` |
-| 9.9 | List comments | `GET` | `/posts/{id}/comments` | ⬜ | |
-| 9.10 | Delete comment | `DELETE` | `/comments/{id}` | ⬜ | |
-| 9.11 | Save post | `POST` | `/posts/{id}/save` | ⬜ | |
-| 9.12 | Unsave post | `DELETE` | `/posts/{id}/save` | ⬜ | |
-| 9.13 | List saved posts | `GET` | `/posts/saved` | ⬜ | |
+| 9.1 | List posts (feed) | `GET` | `/posts` | ✅ | |
+| 9.2 | Create post | `POST` | `/posts` | ✅ | Body: `{content, visibility}` |
+| 9.3 | View single post | `GET` | `/posts/{id}` | ✅ | |
+| 9.4 | Upload post media | `POST` | `/posts/{id}/media` | ✅ | Multipart: `media` file |
+| 9.5 | Like post | `POST` | `/posts/{id}/like` | ✅ | |
+| 9.6 | Unlike post | `DELETE` | `/posts/{id}/like` | ✅ | |
+| 9.7 | List post likes | `GET` | `/posts/{id}/likes` | ✅ | |
+| 9.8 | Add comment | `POST` | `/posts/{id}/comments` | ✅ | Body: `{body}` |
+| 9.9 | List comments | `GET` | `/posts/{id}/comments` | ✅ | |
+| 9.10 | Delete comment | `DELETE` | `/comments/{id}` | ✅ | |
+| 9.11 | Save post | `POST` | `/posts/{id}/save` | ✅ | |
+| 9.12 | Unsave post | `DELETE` | `/posts/{id}/save` | ✅ | |
+| 9.13 | List saved posts | `GET` | `/posts/saved` | ✅ | |
 
 ---
 
@@ -309,7 +309,7 @@
 | 6 — Audio Calls | 7 | 7 | 0 | 0 |
 | 7 — Video Calls | 7 | 7 | 0 | 0 |
 | 8 — Voice Rooms | 15 | 15 | 0 | 0 |
-| 9 — Social Feed | 13 | 0 | 0 | 13 |
+| 9 — Social Feed | 13 | 13 | 0 | 0 |
 | 10 — Translation | 6 | 0 | 0 | 6 |
 | 11 — Gifts/Coins | 9 | 0 | 0 | 9 |
 | 12 — Matching | 6 | 0 | 0 | 6 |
@@ -317,4 +317,4 @@
 | 14 — Reports | 2 | 0 | 0 | 2 |
 | 15 — Admin | 23 | 0 | 0 | 23 |
 | Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **76** | **0** | **77** |
+| **TOTAL** | **153** | **89** | **0** | **64** |

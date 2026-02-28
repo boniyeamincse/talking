@@ -87,7 +87,7 @@ class PostService
         $fileType = str_starts_with($file->getMimeType(), 'image/') ? 'image' : 'video';
         
         // Store file with unique name
-        $path = $this->mediaService->storeFile($file, 'posts');
+        $path = $this->mediaService->storeMediaFile($file, 'post');
 
         // Create PostMedia record
         return PostMedia::create([

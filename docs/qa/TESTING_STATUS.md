@@ -238,8 +238,8 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 14.1 | Submit report | `POST` | `/reports` | ⬜ | Body: `{reportable_type, reportable_id, type, reason}` |
-| 14.2 | List my reports | `GET` | `/reports/my` | ⬜ | |
+| 14.1 | Submit report | `POST` | `/reports` | ✅ | Body: `{reportable_type, reportable_id, type, reason}` |
+| 14.2 | List my reports | `GET` | `/reports/my` | ✅ | |
 
 ---
 
@@ -314,7 +314,7 @@
 | 11 — Gifts/Coins | 9 | 9 | 0 | 0 |
 | 12 — Matching | 6 | 6 | 0 | 0 |
 | 13 — Notifications | 7 | 7 | 0 | 0 |
-| 14 — Reports | 2 | 0 | 0 | 2 |
+| 14 — Reports | 2 | 2 | 0 | 0 |
 | 15 — Admin | 23 | 0 | 0 | 23 |
 | Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **117** | **0** | **36** |
+| **TOTAL** | **153** | **119** | **0** | **34** |

@@ -195,15 +195,15 @@
 
 | # | Test | Method | Endpoint | Status | Notes |
 |---|------|--------|----------|--------|-------|
-| 11.1 | List gifts | `GET` | `/gifts` | ⬜ | |
-| 11.2 | Gift categories | `GET` | `/gifts/categories` | ⬜ | |
-| 11.3 | Send gift | `POST` | `/gifts/send` | ⬜ | Body: `{gift_id, receiver_id}` |
-| 11.4 | Gift history | `GET` | `/gifts/history` | ⬜ | |
-| 11.5 | Leaderboard | `GET` | `/gifts/leaderboard` | ⬜ | |
-| 11.6 | Coin balance | `GET` | `/gifts/coins/balance` | ⬜ | |
-| 11.7 | Top-up coins | `POST` | `/gifts/coins/topup` | ⬜ | Body: `{amount, payment_method}` |
-| 11.8 | Confirm top-up | `POST` | `/gifts/coins/confirm` | ⬜ | Body: `{transaction_id}` |
-| 11.9 | Coin transactions | `GET` | `/gifts/coins/transactions` | ⬜ | |
+| 11.1 | List gifts | `GET` | `/gifts` | ✅ | |
+| 11.2 | Gift categories | `GET` | `/gifts/categories` | ✅ | |
+| 11.3 | Send gift | `POST` | `/gifts/send` | ✅ | Body: `{gift_id, receiver_id}` |
+| 11.4 | Gift history | `GET` | `/gifts/history` | ✅ | |
+| 11.5 | Leaderboard | `GET` | `/gifts/leaderboard` | ✅ | |
+| 11.6 | Coin balance | `GET` | `/gifts/coins/balance` | ✅ | |
+| 11.7 | Top-up coins | `POST` | `/gifts/coins/topup` | ✅ | Behaves as expected (unconfigured) |
+| 11.8 | Confirm top-up | `POST` | `/gifts/coins/confirm` | ✅ | Body: `{transaction_id}` |
+| 11.9 | Coin transactions | `GET` | `/gifts/coins/transactions` | ✅ | |
 
 ---
 
@@ -311,10 +311,10 @@
 | 8 — Voice Rooms | 15 | 15 | 0 | 0 |
 | 9 — Social Feed | 13 | 13 | 0 | 0 |
 | 10 — Translation | 6 | 6 | 0 | 0 |
-| 11 — Gifts/Coins | 9 | 0 | 0 | 9 |
+| 11 — Gifts/Coins | 9 | 9 | 0 | 0 |
 | 12 — Matching | 6 | 0 | 0 | 6 |
 | 13 — Notifications | 7 | 0 | 0 | 7 |
 | 14 — Reports | 2 | 0 | 0 | 2 |
 | 15 — Admin | 23 | 0 | 0 | 23 |
 | Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **95** | **0** | **58** |
+| **TOTAL** | **153** | **104** | **0** | **49** |

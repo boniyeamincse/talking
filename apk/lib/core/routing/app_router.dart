@@ -4,6 +4,10 @@ import 'package:banitalk/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:banitalk/shared/widgets/main_layout.dart';
 import '../../di/service_locator.dart';
 
+import 'package:banitalk/features/chat/presentation/pages/chat_list_screen.dart';
+import 'package:banitalk/features/chat/presentation/pages/chat_window_page.dart';
+import 'package:banitalk/features/chat/presentation/bloc/chat_bloc.dart';
+
 class AppRouter {
   static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -48,6 +52,13 @@ class AppRouter {
             ),
           ),
           GoRoute(
+            path: '/chat',
+            builder: (context, state) => BlocProvider(
+              create: (_) => sl<ChatBloc>(),
+              child: const ChatListScreen(),
+            ),
+          ),
+          GoRoute(
             path: '/profile/:id',
             builder: (context, state) {
               final id = int.parse(state.pathParameters['id']!);
@@ -58,6 +69,18 @@ class AppRouter {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: '/chat/:id',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final title = state.uri.queryParameters['title'] ?? 'Chat';
+          return BlocProvider(
+            create: (_) => sl<ChatBloc>(),
+            child: ChatWindowPage(conversationId: id, title: title),
+          );
+        },
       ),
     ],
   );

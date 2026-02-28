@@ -286,13 +286,13 @@
 
 | # | Test | Status | Notes |
 |---|------|--------|-------|
-| E.1 | Unauthorized request (no token) | ⬜ | Should return 401 |
-| E.2 | Access admin route as regular user | ⬜ | Should return 403 |
-| E.3 | Access super_admin route as admin | ⬜ | Should return 403 |
-| E.4 | Invalid JSON body | ⬜ | Should return 422 |
-| E.5 | Request non-existent resource | ⬜ | Should return 404 |
-| E.6 | Rate limiting triggers | ⬜ | Should return 429 |
-| E.7 | Validation errors have correct format | ⬜ | `{success, message, data}` |
+| E.1 | Unauthorized request (no token) | ✅ | Should return 401 |
+| E.2 | Access admin route as regular user | ✅ | Should return 403 |
+| E.3 | Access super_admin route as admin | ✅ | Should return 403 |
+| E.4 | Invalid JSON body | ✅ | Should return 422 |
+| E.5 | Request non-existent resource | ✅ | Should return 404 |
+| E.6 | Rate limiting triggers | ✅ | Should return 429 |
+| E.7 | Validation errors have correct format | ✅ | `{success, message, data}` |
 
 ---
 
@@ -316,5 +316,5 @@
 | 13 — Notifications | 7 | 7 | 0 | 0 |
 | 14 — Reports | 2 | 2 | 0 | 0 |
 | 15 — Admin | 23 | 23 | 0 | 0 |
-| Edge Cases | 7 | 0 | 0 | 7 |
-| **TOTAL** | **153** | **142** | **0** | **11** |
+| Edge Cases | 7 | 7 | 0 | 0 |
+| **TOTAL** | **153** | **153** | **0** | **0** |

@@ -19,6 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->api(prepend: [
             ForceJsonResponse::class,
+        ], append: [
+            'throttle:api',
         ]);
         
         $middleware->alias([
@@ -32,5 +34,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Validation\ValidationException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'data' => $e->errors(),
+                ], 422);
+            }
+        });
     })->create();

@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Phase 7: Auto-translate messages on send
         Event::listen(MessageSent::class, AutoTranslateMessage::class);
+
+        // Rate Limiter for API
+        \Illuminate\Support\Facades\RateLimiter::for('api', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }
 

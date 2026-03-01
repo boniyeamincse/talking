@@ -4,22 +4,22 @@ import { cn } from "@/lib/utils";
 
 interface BadgeProps {
     children: React.ReactNode;
-    variant?: 'primary' | 'success' | 'warning' | 'danger' | 'secondary';
+    variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
     className?: string;
 }
 
-export function Badge({ children, variant = 'primary', className }: BadgeProps) {
+export function Badge({ children, variant = 'default', className }: BadgeProps) {
     const variants = {
-        primary: "bg-primary/20 text-primary border-primary/20",
-        success: "bg-emerald-500/20 text-emerald-500 border-emerald-500/20",
-        warning: "bg-amber-500/20 text-amber-500 border-amber-500/20",
-        danger: "bg-rose-500/20 text-rose-500 border-rose-500/20",
-        secondary: "bg-white/5 text-muted-foreground border-white/10"
+        default: "bg-slate-800 text-slate-300 border-slate-700",
+        success: "bg-green-500/10 text-green-400 border-green-500/20",
+        warning: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+        error: "bg-red-500/10 text-red-400 border-red-500/20",
+        info: "bg-blue-500/10 text-blue-400 border-blue-500/20",
     };
 
     return (
         <span className={cn(
-            "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border",
+            "inline-flex items-center px-2 py-1 text-xs font-medium rounded-md border",
             variants[variant],
             className
         )}>

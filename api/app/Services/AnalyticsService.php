@@ -14,34 +14,30 @@ class AnalyticsService
      */
     public function getOverview(): array
     {
+        $totalUsers = User::count();
+        $activeToday = User::whereDate('last_seen_at', today())->count();
+        $newToday = User::whereDate('created_at', today())->count();
+        $activeSessions = User::where('last_seen_at', '>=', now()->subMinutes(15))->count();
+        
+        $totalCalls = DB::table('calls')->count();
+        $totalRooms = DB::table('voice_rooms')->count();
+        $pendingReports = DB::table('reports')->where('status', 'pending')->count();
+        
+        $coinRevenue = DB::table('coin_transactions')
+            ->where('type', 'topup')
+            ->sum('amount');
+        $pricePerCoin = 0.01;
+        $totalRevenue = round($coinRevenue * $pricePerCoin, 2);
+
         return [
-            'users' => [
-                'total' => User::count(),
-                'active' => User::where('status', 'active')->count(),
-                'banned' => User::where('status', 'banned')->count(),
-                'suspended' => User::where('status', 'suspended')->count(),
-                'new_today' => User::whereDate('created_at', today())->count(),
-                'new_this_week' => User::where('created_at', '>=', now()->startOfWeek())->count(),
-                'new_this_month' => User::where('created_at', '>=', now()->startOfMonth())->count(),
-            ],
-            'content' => [
-                'total_posts' => DB::table('posts')->count(),
-                'posts_today' => DB::table('posts')->whereDate('created_at', today())->count(),
-                'total_messages' => DB::table('messages')->count(),
-                'messages_today' => DB::table('messages')->whereDate('created_at', today())->count(),
-            ],
-            'moderation' => [
-                'pending_reports' => DB::table('reports')->where('status', 'pending')->count(),
-                'reports_today' => DB::table('reports')->whereDate('created_at', today())->count(),
-                'resolved_this_week' => DB::table('reports')
-                    ->where('status', 'resolved')
-                    ->where('resolved_at', '>=', now()->startOfWeek())
-                    ->count(),
-            ],
-            'gifts' => [
-                'total_sent' => GiftTransaction::count(),
-                'sent_today' => GiftTransaction::whereDate('created_at', today())->count(),
-            ],
+            'total_users' => $totalUsers,
+            'active_users_today' => $activeToday,
+            'new_users_today' => $newToday,
+            'active_sessions' => $activeSessions,
+            'total_calls' => $totalCalls,
+            'total_rooms' => $totalRooms,
+            'total_revenue' => $totalRevenue,
+            'pending_reports' => $pendingReports,
         ];
     }
 

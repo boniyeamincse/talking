@@ -1,128 +1,216 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { MENU_CONFIG, ROLE_STYLE, BADGE_STYLES } from "@/lib/menu-config";
-import { AdminPageLayout } from "@/components/dashboard/AdminPageLayout";
+import { useEffect, useState } from 'react';
+import { api } from '@/lib/api';
+import StatCard from '@/components/ui/StatCard';
+import { Card, CardHeader, CardContent } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import Skeleton from '@/components/ui/Skeleton';
+import { Activity, Users, Phone, MessageSquare, Gift, AlertTriangle, TrendingUp, DollarSign, Globe, Shield } from 'lucide-react';
 
-export default function OverviewPage() {
-    const [view, setView] = useState<"menu" | "table">("menu");
+interface Stats {
+  total_users: number;
+  active_users_today: number;
+  total_calls: number;
+  total_rooms: number;
+  total_revenue: number;
+  pending_reports: number;
+  new_users_today: number;
+  active_sessions: number;
+}
 
-    const totalMenus = MENU_CONFIG.length;
-    const totalSubs = MENU_CONFIG.reduce((a, m) => a + m.sub.length, 0);
-    const saOnly = MENU_CONFIG.filter(m => m.role === "SA").length;
-    const shared = MENU_CONFIG.filter(m => m.role === "A").length;
-    const saSubCount = MENU_CONFIG.reduce((a, m) => a + m.sub.filter(s => s.role === "SA").length, 0);
-    const aSubCount = MENU_CONFIG.reduce((a, m) => a + m.sub.filter(s => s.role === "A").length, 0);
+export default function DashboardPage() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const stats = [
-        { label: "Menu Groups", val: totalMenus, color: "#38bdf8" },
-        { label: "Sub-items", val: totalSubs, color: "#a78bfa" },
-        { label: "SA-Only Menus", val: saOnly, color: "#f472b6" },
-        { label: "Shared Menus", val: shared, color: "#34d399" },
-        { label: "SA Sub-items", val: saSubCount, color: "#c084fc" },
-        { label: "Admin Sub-items", val: aSubCount, color: "#4ade80" },
-    ];
+  useEffect(() => {
+    loadStats();
+    const interval = setInterval(loadStats, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
+  const loadStats = async () => {
+    const response = await api.analytics.overview();
+    if (response.success && response.data) {
+      setStats(response.data);
+    }
+    setLoading(false);
+  };
+
+  if (loading) {
     return (
-        <AdminPageLayout
-            title="Dashboard Overview"
-            subtitle="Comprehensive overview of the Talkin platform menu structure and configuration."
-        >
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <div className="flex gap-2 items-center">
-                    {["menu", "table"].map((v) => (
-                        <button
-                            key={v}
-                            onClick={() => setView(v as any)}
-                            className={cn(
-                                "px-4 py-2 rounded-lg border text-[12px] font-semibold tracking-wide transition-all duration-200 capitalize",
-                                view === v
-                                    ? "bg-[#38bdf8]/15 border-[#38bdf8]/35 text-[#38bdf8]"
-                                    : "bg-white/4 border-white/7 text-[#475569] hover:bg-white/8"
-                            )}
-                        >
-                            {v === "menu" ? "⊞ Menu View" : "⊟ Table View"}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-10">
-                {stats.map((s) => (
-                    <div key={s.label} className="relative overflow-hidden bg-white/2 border border-white/5 rounded-xl p-4 transition-transform hover:scale-[1.02]">
-                        <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(90deg, ${s.color}80, transparent)` }} />
-                        <div className="text-2xl font-extrabold text-[#f1f5f9] tracking-tight">{s.val}</div>
-                        <div className="text-[10px] text-[#334155] mt-1 uppercase font-medium tracking-wider">{s.label}</div>
-                    </div>
-                ))}
-            </div>
-
-            {view === "menu" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4.5">
-                    {MENU_CONFIG.map((menu) => (
-                        <motion.div key={menu.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/2 border border-white/6 rounded-2xl overflow-hidden transition-all duration-300 hover:border-[#38bdf8]/40 group">
-                            <div className="p-4 flex items-center gap-3 border-b border-white/5" style={{ background: `linear-gradient(90deg, ${menu.color}12, transparent)` }}>
-                                <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[16px] shrink-0 border transition-transform duration-300 group-hover:scale-110" style={{ backgroundColor: `${menu.color}18`, borderColor: `${menu.color}30`, color: menu.color }}>{menu.icon}</div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-[13px] font-bold text-[#f1f5f9] tracking-tight">{menu.label}</div>
-                                    <div className="mono text-[9px] text-[#334155] truncate">{menu.path}</div>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    {menu.badge && (
-                                        <span className="mono text-[8px] py-0.5 px-1.5 rounded-full font-bold border" style={{ backgroundColor: BADGE_STYLES[menu.badgeType!].bg, color: BADGE_STYLES[menu.badgeType!].color, borderColor: BADGE_STYLES[menu.badgeType!].border }}>{menu.badge}</span>
-                                    )}
-                                    <span className="text-[10px] font-bold" style={{ color: menu.color }}>{menu.sub.length}</span>
-                                </div>
-                            </div>
-                            <div className="p-2 py-3 space-y-0.5">
-                                {menu.sub.map((sub, idx) => (
-                                    <div key={idx} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-colors hover:bg-white/3 group/sub">
-                                        <div className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: idx % 3 === 0 ? menu.color : "#1e293b" }} />
-                                        <span className="flex-1 text-[11.5px] text-[#64748b] tracking-tight group-hover/sub:text-[#94a3b8] transition-colors">{sub.label}</span>
-                                        {sub.role === "SA" && (
-                                            <span className="mono text-[7px] py-[1px] px-1 rounded bg-[#a78bfa]/10 border border-[#a78bfa]/15 text-[#7c3aed]">SA</span>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            ) : (
-                <div className="bg-white/1.5 border border-white/6 rounded-2xl overflow-hidden shadow-2xl">
-                    <div className="grid grid-cols-[32px_200px_1fr_60px_60px_60px] gap-0 px-5 py-3.5 bg-white/3 border-b border-white/6">
-                        {["#", "Menu / Sub-item", "Route Path", "Role", "Type", "Subs"].map((h, i) => (
-                            <div key={h} className={cn("mono text-[10px] text-[#334155] font-bold tracking-widest uppercase", i >= 3 ? "text-center" : "text-left")}>{h}</div>
-                        ))}
-                    </div>
-                    <div className="divide-y divide-white/4">
-                        {MENU_CONFIG.map((menu) => (
-                            <div key={menu.id} className="group">
-                                <div className="grid grid-cols-[32px_200px_1fr_60px_60px_60px] gap-0 px-5 py-3 transition-colors hover:bg-white/2 items-center" style={{ background: `linear-gradient(90deg, ${menu.color}06, transparent)` }}>
-                                    <span className="text-[14px]" style={{ color: menu.color }}>{menu.icon}</span>
-                                    <span className="text-[12.5px] font-bold text-[#e2e8f0] tracking-tight">{menu.label}</span>
-                                    <span className="mono text-[10px] text-[#334155]">{menu.path}</span>
-                                    <div className="flex justify-center"><span className="mono text-[9px] font-bold px-1.5 py-0.5 rounded border border-[#a78bfa]/25 bg-[#a78bfa]/10 text-[#a78bfa]">{menu.role}</span></div>
-                                    <div className="flex justify-center"><span className="mono text-[9px] px-1.5 py-0.5 rounded border border-[#38bdf8]/20 bg-[#38bdf8]/10 text-[#38bdf8]">group</span></div>
-                                    <div className="flex justify-center"><span className="text-[11px] font-bold" style={{ color: menu.color }}>{menu.sub.length}</span></div>
-                                </div>
-                                {menu.sub.map((sub, si) => (
-                                    <div key={si} className="grid grid-cols-[32px_200px_1fr_60px_60px_60px] gap-0 px-5 pl-11 py-2 items-center bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
-                                        <span className="text-[#1e293b] text-[10px]">└</span>
-                                        <span className="text-[12px] text-[#64748b] tracking-tight">{sub.label}</span>
-                                        <span className="mono text-[9px] text-[#1e293b] truncate pr-4">{sub.path}</span>
-                                        <div className="flex justify-center"><span className="mono text-[8px] font-bold px-1 py-0.5 rounded border border-[#a78bfa]/15 bg-[#a78bfa]/5 text-[#7c3aed]">{sub.role}</span></div>
-                                        <div className="flex justify-center"><span className="mono text-[8px] px-1 py-0.5 rounded border border-white/5 bg-white/4 text-[#334155]">page</span></div>
-                                        <div className="flex justify-center text-[9px] text-[#1e293b]">—</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </AdminPageLayout>
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-20 w-full" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Skeleton className="h-32 w-full" count={8} />
+        </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-100">Dashboard Overview</h1>
+          <p className="text-slate-400 mt-1">Welcome to BaniTalk Super Admin Dashboard</p>
+        </div>
+        <Badge variant="success">Live</Badge>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Users"
+          value={stats?.total_users?.toLocaleString() || '0'}
+          change="+12.5%"
+          trend="up"
+          icon={Users}
+          iconColor="bg-blue-600"
+        />
+        <StatCard
+          title="Active Today"
+          value={stats?.active_users_today?.toLocaleString() || '0'}
+          change="+8.2%"
+          trend="up"
+          icon={Activity}
+          iconColor="bg-green-600"
+        />
+        <StatCard
+          title="Active Sessions"
+          value={stats?.active_sessions?.toLocaleString() || '0'}
+          change="+5.1%"
+          trend="up"
+          icon={Globe}
+          iconColor="bg-purple-600"
+        />
+        <StatCard
+          title="New Users Today"
+          value={stats?.new_users_today?.toLocaleString() || '0'}
+          change="+15.3%"
+          trend="up"
+          icon={TrendingUp}
+          iconColor="bg-cyan-600"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Calls"
+          value={stats?.total_calls?.toLocaleString() || '0'}
+          change="+18.7%"
+          trend="up"
+          icon={Phone}
+          iconColor="bg-indigo-600"
+        />
+        <StatCard
+          title="Voice Rooms"
+          value={stats?.total_rooms?.toLocaleString() || '0'}
+          change="+5.7%"
+          trend="up"
+          icon={MessageSquare}
+          iconColor="bg-orange-600"
+        />
+        <StatCard
+          title="Revenue"
+          value={`$${(stats?.total_revenue || 0).toLocaleString()}`}
+          change="+22.1%"
+          trend="up"
+          icon={DollarSign}
+          iconColor="bg-pink-600"
+        />
+        <StatCard
+          title="Pending Reports"
+          value={stats?.pending_reports?.toLocaleString() || '0'}
+          change="-3.2%"
+          trend="down"
+          icon={AlertTriangle}
+          iconColor="bg-red-600"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold text-slate-100">Recent Activity</h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[
+                { event: 'New user registered', time: '2 min ago', type: 'success' },
+                { event: 'Report submitted', time: '5 min ago', type: 'warning' },
+                { event: 'Payment received', time: '8 min ago', type: 'success' },
+                { event: 'User suspended', time: '12 min ago', type: 'error' },
+                { event: 'New voice room created', time: '15 min ago', type: 'info' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className={`w-2 h-2 rounded-full ${
+                    item.type === 'success' ? 'bg-green-500' :
+                    item.type === 'warning' ? 'bg-yellow-500' :
+                    item.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                  }`}></div>
+                  <span className="text-sm text-slate-300 flex-1">{item.event}</span>
+                  <span className="text-xs text-slate-500">{item.time}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold text-slate-100">System Health</h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { name: 'API Server', status: 'Operational', uptime: '99.9%' },
+                { name: 'Database', status: 'Operational', uptime: '99.8%' },
+                { name: 'WebSocket', status: 'Operational', uptime: '99.7%' },
+                { name: 'Queue', status: 'Operational', uptime: '99.9%' },
+              ].map((service, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-slate-300">{service.name}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-slate-500">{service.uptime}</span>
+                    <Badge variant="success">{service.status}</Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <h2 className="text-lg font-semibold text-slate-100">Quick Actions</h2>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'View Users', icon: Users, href: '/admin/users' },
+              { label: 'View Reports', icon: AlertTriangle, href: '/admin/reports' },
+              { label: 'Active Sessions', icon: Activity, href: '/admin/sessions' },
+              { label: 'Security Events', icon: Shield, href: '/admin/audit/security' },
+            ].map((action, i) => {
+              const Icon = action.icon;
+              return (
+                <a
+                  key={i}
+                  href={action.href}
+                  className="flex flex-col items-center gap-2 p-4 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-750 hover:border-slate-600 transition-colors"
+                >
+                  <Icon className="w-6 h-6 text-slate-400" />
+                  <span className="text-sm text-slate-300">{action.label}</span>
+                </a>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

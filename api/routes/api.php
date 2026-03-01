@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuditController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CallController;
 use App\Http\Controllers\Api\ChatController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Api\MediaMessageController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ReactionController;
+use App\Http\Controllers\Api\SecurityController;
+use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VideoController;
@@ -282,6 +285,19 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'is.admin'])->group(funct
     // Analytics
     Route::get('analytics/users', [App\Http\Controllers\Api\AdminController::class, 'analyticsUsers']);
     Route::get('analytics/calls', [App\Http\Controllers\Api\AdminController::class, 'analyticsCalls']);
+    
+    // Sessions
+    Route::get('sessions/active', [SessionController::class, 'activeSessions']);
+    Route::post('sessions/{id}/logout', [SessionController::class, 'forceLogout']);
+    
+    // Audit Logs
+    Route::get('audit/login', [AuditController::class, 'loginLogs']);
+    Route::get('security/events', [AuditController::class, 'securityEvents']);
+    
+    // Security
+    Route::get('security/banned-ips', [SecurityController::class, 'bannedIPs']);
+    Route::post('security/banned-ips', [SecurityController::class, 'banIP']);
+    Route::post('security/banned-ips/{id}/unban', [SecurityController::class, 'unbanIP']);
 });
 
 // Admin routes (Phase 12) — Super Admin only

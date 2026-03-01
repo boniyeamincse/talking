@@ -6,14 +6,16 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { MENU_CONFIG, ROLE_STYLE, BADGE_STYLES, Role } from "@/lib/menu-config";
+import { useAuth } from "@/lib/auth-context";
 
 export function Sidebar() {
     const pathname = usePathname();
+    const { user, logout } = useAuth();
     const [collapsed, setCollapsed] = useState(false);
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
     const [searchQuery, setSearchQuery] = useState("");
 
-    const currentRole: Role = "SA"; // Mock role for now
+    const currentRole: Role = user?.role === 'super_admin' ? 'SA' : 'A';
 
     const toggleMenu = (id: string) => {
         setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -198,7 +200,19 @@ export function Sidebar() {
             </nav>
 
             {/* Collapse Button */}
-            <div className="p-2.5 border-t border-white/5">
+            <div className="p-2.5 border-t border-white/5 space-y-2">
+                {!collapsed && user && (
+                    <div className="px-2 py-1.5 text-[11px] text-[#94a3b8] truncate">
+                        {user.name}
+                    </div>
+                )}
+                <button
+                    onClick={() => logout()}
+                    className="w-full flex items-center justify-center gap-2 py-2 px-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all duration-200 mb-2"
+                >
+                    <span className="text-xs">⎋</span>
+                    {!collapsed && <span className="mono text-[10px] uppercase tracking-wider">Logout</span>}
+                </button>
                 <button
                     onClick={() => setCollapsed(!collapsed)}
                     className="w-full flex items-center justify-center gap-2 py-2 px-2.5 rounded-lg bg-white/[0.03] border border-white/[0.07] text-[#334155] hover:bg-white/[0.08] transition-all duration-200 group"

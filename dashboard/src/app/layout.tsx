@@ -1,18 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: '--font-inter'
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: '--font-jakarta'
-});
 
 export const metadata: Metadata = {
   title: "BaniTalk Admin Dashboard",
@@ -26,12 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${plusJakarta.variable} font-sans min-h-screen bg-background`}>
-        <Sidebar />
-        <Header />
-        <main className="ml-72 mt-28 p-8">
-          {children}
-        </main>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+      </head>
+      <body className="bg-background font-sans antialiased overflow-x-hidden">
+        {children}
       </body>
     </html>
   );

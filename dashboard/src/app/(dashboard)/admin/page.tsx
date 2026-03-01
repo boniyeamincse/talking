@@ -2,15 +2,31 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { AnalyticsOverview } from '@/lib/types';
-import { Activity, Users, Phone, MessageSquare, Gift, AlertTriangle } from 'lucide-react';
+import StatCard from '@/components/ui/StatCard';
+import { Card, CardHeader, CardContent } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import Skeleton from '@/components/ui/Skeleton';
+import { Activity, Users, Phone, MessageSquare, Gift, AlertTriangle, TrendingUp, DollarSign, Globe, Shield } from 'lucide-react';
+
+interface Stats {
+  total_users: number;
+  active_users_today: number;
+  total_calls: number;
+  total_rooms: number;
+  total_revenue: number;
+  pending_reports: number;
+  new_users_today: number;
+  active_sessions: number;
+}
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<AnalyticsOverview | null>(null);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadStats();
+    const interval = setInterval(loadStats, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadStats = async () => {
@@ -23,141 +39,178 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="p-6 space-y-6">
+        <Skeleton className="h-20 w-full" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Skeleton className="h-32 w-full" count={8} />
+        </div>
       </div>
     );
   }
 
-  const statCards = [
-    {
-      title: 'Total Users',
-      value: stats?.total_users || 0,
-      icon: Users,
-      color: 'bg-blue-500',
-      change: '+12.5%',
-    },
-    {
-      title: 'Active Today',
-      value: stats?.active_users_today || 0,
-      icon: Activity,
-      color: 'bg-green-500',
-      change: '+8.2%',
-    },
-    {
-      title: 'Total Calls',
-      value: stats?.total_calls || 0,
-      icon: Phone,
-      color: 'bg-purple-500',
-      change: '+15.3%',
-    },
-    {
-      title: 'Voice Rooms',
-      value: stats?.total_rooms || 0,
-      icon: MessageSquare,
-      color: 'bg-orange-500',
-      change: '+5.7%',
-    },
-    {
-      title: 'Revenue',
-      value: `$${(stats?.total_revenue || 0).toLocaleString()}`,
-      icon: Gift,
-      color: 'bg-pink-500',
-      change: '+22.1%',
-    },
-    {
-      title: 'Pending Reports',
-      value: stats?.pending_reports || 0,
-      icon: AlertTriangle,
-      color: 'bg-red-500',
-      change: '-3.2%',
-    },
-  ];
-
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Overview</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Welcome to BaniTalk Super Admin Dashboard
-        </p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-100">Dashboard Overview</h1>
+          <p className="text-slate-400 mt-1">Welcome to BaniTalk Super Admin Dashboard</p>
+        </div>
+        <Badge variant="success">Live</Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statCards.map((card, index) => {
-          const Icon = card.icon;
-          return (
-            <div
-              key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    {card.title}
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
-                    {card.value}
-                  </p>
-                  <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                    {card.change} from last week
-                  </p>
-                </div>
-                <div className={`${card.color} p-3 rounded-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Users"
+          value={stats?.total_users?.toLocaleString() || '0'}
+          change="+12.5%"
+          trend="up"
+          icon={Users}
+          iconColor="bg-blue-600"
+        />
+        <StatCard
+          title="Active Today"
+          value={stats?.active_users_today?.toLocaleString() || '0'}
+          change="+8.2%"
+          trend="up"
+          icon={Activity}
+          iconColor="bg-green-600"
+        />
+        <StatCard
+          title="Active Sessions"
+          value={stats?.active_sessions?.toLocaleString() || '0'}
+          change="+5.1%"
+          trend="up"
+          icon={Globe}
+          iconColor="bg-purple-600"
+        />
+        <StatCard
+          title="New Users Today"
+          value={stats?.new_users_today?.toLocaleString() || '0'}
+          change="+15.3%"
+          trend="up"
+          icon={TrendingUp}
+          iconColor="bg-cyan-600"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Calls"
+          value={stats?.total_calls?.toLocaleString() || '0'}
+          change="+18.7%"
+          trend="up"
+          icon={Phone}
+          iconColor="bg-indigo-600"
+        />
+        <StatCard
+          title="Voice Rooms"
+          value={stats?.total_rooms?.toLocaleString() || '0'}
+          change="+5.7%"
+          trend="up"
+          icon={MessageSquare}
+          iconColor="bg-orange-600"
+        />
+        <StatCard
+          title="Revenue"
+          value={`$${(stats?.total_revenue || 0).toLocaleString()}`}
+          change="+22.1%"
+          trend="up"
+          icon={DollarSign}
+          iconColor="bg-pink-600"
+        />
+        <StatCard
+          title="Pending Reports"
+          value={stats?.pending_reports?.toLocaleString() || '0'}
+          change="-3.2%"
+          trend="down"
+          icon={AlertTriangle}
+          iconColor="bg-red-600"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Recent Activity
-          </h2>
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="flex items-center gap-3 text-sm">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-gray-600 dark:text-gray-400">
-                  User activity event {i}
-                </span>
-                <span className="text-gray-400 dark:text-gray-500 ml-auto">
-                  {i} min ago
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            System Health
-          </h2>
-          <div className="space-y-4">
-            {[
-              { name: 'API Server', status: 'Operational', color: 'bg-green-500' },
-              { name: 'Database', status: 'Operational', color: 'bg-green-500' },
-              { name: 'WebSocket', status: 'Operational', color: 'bg-green-500' },
-              { name: 'Queue', status: 'Operational', color: 'bg-green-500' },
-            ].map((service, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  {service.name}
-                </span>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 ${service.color} rounded-full`}></div>
-                  <span className="text-sm text-gray-900 dark:text-white">
-                    {service.status}
-                  </span>
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold text-slate-100">Recent Activity</h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[
+                { event: 'New user registered', time: '2 min ago', type: 'success' },
+                { event: 'Report submitted', time: '5 min ago', type: 'warning' },
+                { event: 'Payment received', time: '8 min ago', type: 'success' },
+                { event: 'User suspended', time: '12 min ago', type: 'error' },
+                { event: 'New voice room created', time: '15 min ago', type: 'info' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className={`w-2 h-2 rounded-full ${
+                    item.type === 'success' ? 'bg-green-500' :
+                    item.type === 'warning' ? 'bg-yellow-500' :
+                    item.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                  }`}></div>
+                  <span className="text-sm text-slate-300 flex-1">{item.event}</span>
+                  <span className="text-xs text-slate-500">{item.time}</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold text-slate-100">System Health</h2>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { name: 'API Server', status: 'Operational', uptime: '99.9%' },
+                { name: 'Database', status: 'Operational', uptime: '99.8%' },
+                { name: 'WebSocket', status: 'Operational', uptime: '99.7%' },
+                { name: 'Queue', status: 'Operational', uptime: '99.9%' },
+              ].map((service, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-slate-300">{service.name}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-slate-500">{service.uptime}</span>
+                    <Badge variant="success">{service.status}</Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <h2 className="text-lg font-semibold text-slate-100">Quick Actions</h2>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'View Users', icon: Users, href: '/admin/users' },
+              { label: 'View Reports', icon: AlertTriangle, href: '/admin/reports' },
+              { label: 'Active Sessions', icon: Activity, href: '/admin/sessions' },
+              { label: 'Security Events', icon: Shield, href: '/admin/audit/security' },
+            ].map((action, i) => {
+              const Icon = action.icon;
+              return (
+                <a
+                  key={i}
+                  href={action.href}
+                  className="flex flex-col items-center gap-2 p-4 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-750 hover:border-slate-600 transition-colors"
+                >
+                  <Icon className="w-6 h-6 text-slate-400" />
+                  <span className="text-sm text-slate-300">{action.label}</span>
+                </a>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

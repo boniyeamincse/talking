@@ -22,13 +22,31 @@ export function Sidebar() {
     };
 
     const filteredMenu = useMemo(() => {
-        if (!searchQuery) return MENU_CONFIG;
-        const q = searchQuery.toLowerCase();
-        return MENU_CONFIG.filter((m) =>
-            m.label.toLowerCase().includes(q) ||
-            m.sub.some(s => s.label.toLowerCase().includes(q))
-        );
-    }, [searchQuery]);
+        let menus = MENU_CONFIG;
+        
+        // Filter by role
+        menus = menus.filter(m => {
+            if (m.role === 'SA' && currentRole !== 'SA') return false;
+            return true;
+        }).map(m => ({
+            ...m,
+            sub: m.sub.filter(s => {
+                if (s.role === 'SA' && currentRole !== 'SA') return false;
+                return true;
+            })
+        }));
+        
+        // Filter by search
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            menus = menus.filter((m) =>
+                m.label.toLowerCase().includes(q) ||
+                m.sub.some(s => s.label.toLowerCase().includes(q))
+            );
+        }
+        
+        return menus;
+    }, [searchQuery, currentRole]);
 
     return (
         <aside
@@ -45,11 +63,11 @@ export function Sidebar() {
                 collapsed ? "p-4 justify-center" : "p-6 py-[22px]"
             )}>
                 <div className="w-9.5 h-9.5 rounded-xl bg-gradient-to-br from-[#38bdf8] via-[#a78bfa] to-[#f472b6] flex items-center justify-center font-extrabold text-lg text-white shadow-[0_0_24px_rgba(56,189,248,0.35)] shrink-0">
-                    T
+                    B
                 </div>
                 {!collapsed && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fade-in">
-                        <div className="font-bold text-[15px] text-[#f1f5f9] tracking-tight leading-tight">Talkin</div>
+                        <div className="font-bold text-[15px] text-[#f1f5f9] tracking-tight leading-tight">BaniTalk</div>
                         <div className="mono text-[9px] text-[#334155] tracking-[0.1em] uppercase">super admin</div>
                     </motion.div>
                 )}

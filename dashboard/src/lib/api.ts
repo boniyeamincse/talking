@@ -33,6 +33,17 @@ class ApiService {
     }
   }
 
+  private async getCsrfCookie(): Promise<void> {
+    const baseUrl = API_BASE_URL.replace('/api/v1', '');
+    try {
+      await fetch(`${baseUrl}/sanctum/csrf-cookie`, {
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Failed to fetch CSRF cookie:', error);
+    }
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
@@ -41,6 +52,7 @@ class ApiService {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
       ...options.headers,
     };
 
@@ -52,6 +64,7 @@ class ApiService {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers,
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -89,11 +102,13 @@ class ApiService {
 
   // Auth endpoints
   auth = {
-    login: (email: string, password: string) =>
-      this.request('/auth/login', {
+    login: async (email: string, password: string) => {
+      await this.getCsrfCookie();
+      return this.request('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
-      }),
+      });
+    },
     logout: () => this.request('/auth/logout', { method: 'POST' }),
     refresh: () => this.request('/auth/refresh', { method: 'POST' }),
     me: () => this.request('/users/me'),
@@ -165,6 +180,21 @@ class ApiService {
     remove: (id: number) =>
       this.request(`/admin/admins/${id}`, { method: 'DELETE' }),
   };
+
+  // Sessions
+  sessions = {
+    active: () => this.request('/admin/sessions/active'),
+    logout: (sessionId: string) =>
+      this.request(`/admin/sessions/${sessionId}/logout`, { method: 'POST' }),
+  };
+
+  // Generic request methods
+  get = (endpoint: string) => this.request(endpoint, { method: 'GET' });
+  post = (endpoint: string, data: any) =>
+    this.request(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
 
   // Platform Settings (Super Admin only)
   settings = {

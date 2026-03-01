@@ -1,65 +1,50 @@
-# CSRF Token Mismatch - FIXED
+# CSRF Token Fix - Quick Test
 
-## Problem
-Laravel Sanctum CSRF token mismatch when calling API from Next.js dashboard.
+## Test Login Endpoint
 
-## Solution Applied
-
-### 1. CSRF Middleware (`api/app/Http/Middleware/VerifyCsrfToken.php`)
-```php
-protected $except = [
-    'api/*',  // Exclude all API routes from CSRF
-];
+```bash
+curl -X POST http://localhost:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "X-Requested-With: XMLHttpRequest" \
+  -d '{"email":"admin@banitalk.com","password":"password123"}'
 ```
 
-### 2. CORS Configuration (`api/config/cors.php`)
-```php
-'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
-'supports_credentials' => true,
-```
-
-### 3. Environment Variables (`api/.env`)
-```env
-FRONTEND_URL=http://localhost:3000
-SANCTUM_STATEFUL_DOMAINS=localhost:3000
-```
-
-### 4. API Service (`dashboard/src/lib/api.ts`)
-```typescript
-headers: {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',  // Added
+## Expected Response
+```json
+{
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Super Admin",
+      "email": "admin@banitalk.com",
+      "role": "super_admin"
+    },
+    "token": "1|xxxxx..."
+  }
 }
 ```
 
-## How It Works
+## Changes Made
 
-**Token-Based Auth (No CSRF needed):**
-- API uses Bearer tokens via `Authorization` header
-- CSRF protection excluded for `api/*` routes
-- CORS configured for localhost:3000
+1. **API Service** (`dashboard/src/lib/api.ts`)
+   - Added `X-Requested-With: XMLHttpRequest` header
+   - Added `credentials: 'include'` for CORS
 
-## Test
+2. **Laravel Config** (already configured)
+   - CSRF excluded for `api/*` routes
+   - CORS allows credentials
+   - Sanctum stateful domains includes localhost:3000
 
-```bash
-# Restart Laravel
-cd api
-php artisan config:clear
-php artisan serve
+3. **Cache Cleared**
+   - Config cache cleared
+   - Application cache cleared
 
-# Restart Next.js
-cd dashboard
-npm run dev
+## Login Now
 
-# Login at http://localhost:3000/login
-```
+1. Go to: `http://localhost:3000/login`
+2. Email: `admin@banitalk.com`
+3. Password: `password123`
+4. Click Login
 
-## Production Setup
-
-Update `api/.env`:
-```env
-FRONTEND_URL=https://dashboard.banitalk.com
-SANCTUM_STATEFUL_DOMAINS=dashboard.banitalk.com
-```
-
-✅ **CSRF issue resolved!**
+The CSRF error should be resolved.

@@ -1,20 +1,42 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import PageTemplate from '@/components/PageTemplate';
-import { Shield, Plus, Edit, Trash2, UserCheck } from 'lucide-react';
-import Link from 'next/link';
+import { useToast } from '@/components/ui/Toast';
+import DataTable from '@/components/ui/DataTable';
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import { Badge } from '@/components/ui/Badge';
+import EmptyState from '@/components/ui/EmptyState';
+import { Shield, Search, Plus, Edit, Trash2, Ban } from 'lucide-react';
 
-export default function AdminsPage() {
-  const [admins, setAdmins] = useState<any[]>([]);
+interface Admin {
+  id: number;
+  name: string;
+  email: string;
+  role: 'admin' | 'super_admin';
+  status: 'active' | 'suspended';
+  last_login: string;
+  created_at: string;
+}
+
+export default function AdminAccountsPage() {
+  const [admins, setAdmins] = useState<Admin[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'super_admin'>('all');
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     loadAdmins();
   }, []);
 
   const loadAdmins = async () => {
+    setLoading(true);
     const response = await api.admins.list();
     if (response.success && response.data) {
       setAdmins(response.data);
@@ -22,132 +44,294 @@ export default function AdminsPage() {
     setLoading(false);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Remove this admin?')) return;
-    const response = await api.admins.remove(id);
+  const filteredAdmins = admins.filter(admin => {
+    const matchesSearch = admin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         admin.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === 'all' || admin.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
+  const handleEdit = (admin: Admin) => {
+    setSelectedAdmin(admin);
+    setEditModalOpen(true);
+  };
+
+  const handleSuspend = async (admin: Admin) => {
+    if (!confirm(`Suspend ${admin.name}?`)) return;
+    const response = await api.admins.update(admin.id, { status: 'suspended' });
     if (response.success) {
-      alert('Admin removed');
+      showToast('Admin suspended successfully', 'success');
       loadAdmins();
+    } else {
+      showToast(response.error || 'Failed to suspend admin', 'error');
     }
   };
 
-  const getRoleBadge = (role: string) => {
-    return role === 'super_admin'
-      ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
-      : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+  const handleDelete = async (admin: Admin) => {
+    if (!confirm(`Delete ${admin.name}? This action cannot be undone.`)) return;
+    const response = await api.admins.remove(admin.id);
+    if (response.success) {
+      showToast('Admin deleted successfully', 'success');
+      loadAdmins();
+    } else {
+      showToast(response.error || 'Failed to delete admin', 'error');
+    }
+  };
+
+  const columns = [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    {
+      key: 'role',
+      label: 'Role',
+      render: (admin: Admin) => (
+        <Badge variant={admin.role === 'super_admin' ? 'info' : 'success'}>
+          {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+        </Badge>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (admin: Admin) => (
+        <Badge variant={admin.status === 'active' ? 'success' : 'error'}>
+          {admin.status}
+        </Badge>
+      ),
+    },
+    { key: 'last_login', label: 'Last Login' },
+    {
+      key: 'actions',
+      label: 'Actions',
+      render: (admin: Admin) => (
+        <div className="flex gap-2">
+          <Button size="sm" variant="ghost" onClick={() => handleEdit(admin)}>
+            <Edit className="w-4 h-4" />
+          </Button>
+          {admin.status === 'active' && (
+            <Button size="sm" variant="ghost" onClick={() => handleSuspend(admin)}>
+              <Ban className="w-4 h-4" />
+            </Button>
+          )}
+          <Button size="sm" variant="danger" onClick={() => handleDelete(admin)}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-100">Admin Accounts</h1>
+          <p className="text-slate-400 text-sm mt-1">Manage administrator accounts and permissions</p>
+        </div>
+        <Button onClick={() => setCreateModalOpen(true)}>
+          <Plus className="w-4 h-4 mr-2" />
+          Create Admin
+        </Button>
+      </div>
+
+      <div className="flex gap-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value as any)}
+          className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-md text-slate-100 text-sm"
+        >
+          <option value="all">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+        </select>
+      </div>
+
+      <div className="bg-slate-900 rounded-lg border border-slate-800 p-6">
+        <DataTable
+          data={filteredAdmins}
+          columns={columns}
+          loading={loading}
+          emptyState={<EmptyState icon={Shield} title="No admins found" />}
+        />
+      </div>
+
+      <CreateAdminModal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSuccess={() => {
+          loadAdmins();
+          setCreateModalOpen(false);
+        }}
+      />
+
+      <EditAdminModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        admin={selectedAdmin}
+        onSuccess={() => {
+          loadAdmins();
+          setEditModalOpen(false);
+        }}
+      />
+    </div>
+  );
+}
+
+function CreateAdminModal({ isOpen, onClose, onSuccess }: any) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'admin',
+  });
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const response = await api.admins.create(formData);
+    setLoading(false);
+
+    if (response.success) {
+      showToast('Admin created successfully', 'success');
+      onSuccess();
+      setFormData({ name: '', email: '', password: '', role: 'admin' });
+    } else {
+      showToast(response.error || 'Failed to create admin', 'error');
+    }
   };
 
   return (
-    <PageTemplate
-      title="Admin Accounts"
-      description="Manage administrator accounts and permissions"
-      actions={
-        <Link
-          href="/admin/admins/create"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Create Admin
-        </Link>
-      }
-    >
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    <Modal isOpen={isOpen} onClose={onClose} title="Create Admin" size="md">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Name"
+          placeholder="John Doe"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          required
+        />
+        <Input
+          label="Email"
+          type="email"
+          placeholder="admin@example.com"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          required
+        />
+        <Input
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          required
+        />
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Role</label>
+          <select
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-800 rounded-md text-slate-100"
+          >
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
         </div>
-      ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700/50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Admin
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Created
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {admins.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
-                      <Shield className="mx-auto h-12 w-12 text-gray-400" />
-                      <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-                        No admins yet
-                      </h3>
-                    </td>
-                  </tr>
-                ) : (
-                  admins.map((admin) => (
-                    <tr key={admin.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                            {admin.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
-                              {admin.name}
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                              @{admin.username}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 dark:text-white">{admin.email}</div>
-                        {admin.email_verified_at && (
-                          <div className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
-                            <UserCheck className="w-3 h-3" />
-                            Verified
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getRoleBadge(
-                            admin.role
-                          )}`}
-                        >
-                          {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(admin.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <div className="flex gap-2">
-                          <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400">
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(admin.id)}
-                            className="text-red-600 hover:text-red-900 dark:text-red-400"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+        <div className="flex gap-2 justify-end pt-4">
+          <Button variant="ghost" onClick={onClose} type="button">
+            Cancel
+          </Button>
+          <Button type="submit" loading={loading}>
+            Create Admin
+          </Button>
         </div>
-      )}
-    </PageTemplate>
+      </form>
+    </Modal>
+  );
+}
+
+function EditAdminModal({ isOpen, onClose, admin, onSuccess }: any) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    role: 'admin',
+  });
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (admin) {
+      setFormData({
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+      });
+    }
+  }, [admin]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!admin) return;
+
+    setLoading(true);
+    const response = await api.admins.update(admin.id, formData);
+    setLoading(false);
+
+    if (response.success) {
+      showToast('Admin updated successfully', 'success');
+      onSuccess();
+    } else {
+      showToast(response.error || 'Failed to update admin', 'error');
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Edit Admin" size="md">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          required
+        />
+        <Input
+          label="Email"
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          required
+        />
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Role</label>
+          <select
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-800 rounded-md text-slate-100"
+          >
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
+        </div>
+        <div className="flex gap-2 justify-end pt-4">
+          <Button variant="ghost" onClick={onClose} type="button">
+            Cancel
+          </Button>
+          <Button type="submit" loading={loading}>
+            Update Admin
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }

@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), var(--font-jakarta), ui-sans-serif, system-ui;
+  --font-mono: var(--font-geist-mono), ui-mono, SFMono-Regular;
+
+  --color-background: #080C14;
+  --color-foreground: #F9FAFB;
+  --color-card: #111827;
+  --color-card-foreground: #F9FAFB;
+  --color-primary: #7C6AF7;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #1F2937;
+  --color-muted: #374151;
+  --color-muted-foreground: #9CA3AF;
+  --color-accent: #7C6AF7;
+  --color-border: #1F2937;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  ::selection {
+    background-color: rgba(124, 106, 247, 0.3);
+    color: #FFFFFF;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/60 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-card/40 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl transition-all duration-300 hover:bg-card/50;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(124, 106, 247, 0.4);
+  }
+
+  .gradient-border {
+    position: relative;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -1px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, rgba(124, 106, 247, 0.5), rgba(74, 222, 128, 0.5));
+  }
+}

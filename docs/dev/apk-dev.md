@@ -68,7 +68,7 @@ This document provides a granular technical roadmap for## Current Status: **Phas
 
 ---
 
-## 🎙️ Phase 5: Voice Rooms & Community
+## 💬 Phase 3: Real-time Messaging System
 **Goal:** Lag-free, rich communication.
 
 - [x] **Chat List**:

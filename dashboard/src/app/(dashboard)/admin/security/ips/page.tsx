@@ -1,202 +1,248 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { useToast } from '@/components/ui/Toast';
-import DataTable from '@/components/ui/DataTable';
-import Modal from '@/components/ui/Modal';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-import { Badge } from '@/components/ui/Badge';
+import PageTemplate from '@/components/PageTemplate';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import EmptyState from '@/components/ui/EmptyState';
-import { Shield, Plus } from 'lucide-react';
+import { Shield, Ban, Trash2, Plus } from 'lucide-react';
 
 interface BannedIP {
   id: number;
   ip_address: string;
   reason: string;
-  type: 'temporary' | 'permanent';
+  banned_by: string;
   banned_at: string;
-  expires_at?: string;
+  expires_at: string | null;
+  attempts: number;
 }
 
 export default function BannedIPsPage() {
   const [ips, setIps] = useState<BannedIP[]>([]);
   const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
-  const { showToast } = useToast();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newIP, setNewIP] = useState({ ip: '', reason: '', duration: '24' });
 
   useEffect(() => {
-    loadIPs();
+    loadBannedIPs();
   }, []);
 
-  const loadIPs = async () => {
-    setLoading(true);
+  const loadBannedIPs = async () => {
     const response = await api.get('/admin/security/banned-ips');
-    if (response.success && response.data) {
+    if (response.success) {
       setIps(response.data);
     }
     setLoading(false);
   };
 
-  const handleUnban = async (id: number, ip: string) => {
-    if (!confirm(`Unban ${ip}?`)) return;
+  const handleBanIP = async () => {
+    const response = await api.post('/admin/security/banned-ips', {
+      ip_address: newIP.ip,
+      reason: newIP.reason,
+      duration_hours: parseInt(newIP.duration),
+    });
+
+    if (response.success) {
+      setShowAddModal(false);
+      setNewIP({ ip: '', reason: '', duration: '24' });
+      loadBannedIPs();
+    }
+  };
+
+  const handleUnban = async (id: number) => {
+    if (!confirm('Are you sure you want to unban this IP?')) return;
+    
     const response = await api.post(`/admin/security/banned-ips/${id}/unban`, {});
     if (response.success) {
-      showToast('IP unbanned successfully', 'success');
-      loadIPs();
-    } else {
-      showToast(response.error || 'Failed to unban IP', 'error');
+      loadBannedIPs();
     }
   };
 
-  const columns = [
-    { key: 'ip_address', label: 'IP Address' },
-    { key: 'reason', label: 'Reason' },
-    {
-      key: 'type',
-      label: 'Type',
-      render: (ip: BannedIP) => (
-        <Badge variant={ip.type === 'permanent' ? 'error' : 'warning'}>
-          {ip.type}
-        </Badge>
-      ),
-    },
-    {
-      key: 'banned_at',
-      label: 'Banned At',
-      render: (ip: BannedIP) => (
-        <span className="text-slate-300 text-sm">
-          {new Date(ip.banned_at).toLocaleString()}
-        </span>
-      ),
-    },
-    {
-      key: 'expires_at',
-      label: 'Expires',
-      render: (ip: BannedIP) => (
-        <span className="text-slate-400 text-sm">
-          {ip.expires_at ? new Date(ip.expires_at).toLocaleString() : 'Never'}
-        </span>
-      ),
-    },
-    {
-      key: 'actions',
-      label: '',
-      render: (ip: BannedIP) => (
-        <Button size="sm" variant="ghost" onClick={() => handleUnban(ip.id, ip.ip_address)}>
-          Unban
-        </Button>
-      ),
-    },
-  ];
+  if (loading) {
+    return (
+      <PageTemplate title="Banned IP Addresses" description="Manage blocked IP addresses">
+        <LoadingSpinner size="lg" />
+      </PageTemplate>
+    );
+  }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-100">Banned IP Addresses</h1>
-          <p className="text-slate-400 text-sm mt-1">Manage IP bans and restrictions</p>
+    <PageTemplate
+      title="Banned IP Addresses"
+      description="Manage and monitor blocked IP addresses for security"
+      actions={
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors flex items-center gap-2"
+        >
+          <Ban className="w-4 h-4" />
+          Ban IP Address
+        </button>
+      }
+    >
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Total Banned</p>
+              <p className="text-3xl font-bold text-white mt-1">{ips.length}</p>
+            </div>
+            <Shield className="w-12 h-12 text-red-400" />
+          </div>
         </div>
-        <Button onClick={() => setModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Add IP Ban
-        </Button>
+
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Permanent Bans</p>
+              <p className="text-3xl font-bold text-white mt-1">
+                {ips.filter(ip => !ip.expires_at).length}
+              </p>
+            </div>
+            <Ban className="w-12 h-12 text-orange-400" />
+          </div>
+        </div>
+
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Temporary Bans</p>
+              <p className="text-3xl font-bold text-white mt-1">
+                {ips.filter(ip => ip.expires_at).length}
+              </p>
+            </div>
+            <Shield className="w-12 h-12 text-yellow-400" />
+          </div>
+        </div>
       </div>
 
-      <div className="bg-slate-900 rounded-lg border border-slate-800 p-6">
-        <DataTable
-          data={ips}
-          columns={columns}
-          loading={loading}
-          emptyState={<EmptyState icon={Shield} title="No banned IPs" />}
+      {/* Banned IPs Table */}
+      {ips.length === 0 ? (
+        <EmptyState
+          icon={Shield}
+          title="No banned IPs"
+          description="No IP addresses are currently banned"
         />
-      </div>
-
-      <AddIPBanModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={() => {
-          loadIPs();
-          setModalOpen(false);
-        }}
-      />
-    </div>
-  );
-}
-
-function AddIPBanModal({ isOpen, onClose, onSuccess }: any) {
-  const [formData, setFormData] = useState({
-    ip_address: '',
-    reason: '',
-    type: 'permanent',
-    days: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const { showToast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const response = await api.post('/admin/security/banned-ips', formData);
-    setLoading(false);
-
-    if (response.success) {
-      showToast('IP banned successfully', 'success');
-      onSuccess();
-      setFormData({ ip_address: '', reason: '', type: 'permanent', days: '' });
-    } else {
-      showToast(response.error || 'Failed to ban IP', 'error');
-    }
-  };
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add IP Ban" size="md">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="IP Address"
-          placeholder="192.168.1.1"
-          value={formData.ip_address}
-          onChange={(e) => setFormData({ ...formData, ip_address: e.target.value })}
-          required
-        />
-        <Input
-          label="Reason"
-          placeholder="Suspicious activity"
-          value={formData.reason}
-          onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-          required
-        />
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Ban Type</label>
-          <select
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-            className="w-full px-4 py-2 bg-slate-900 border border-slate-800 rounded-md text-slate-100"
-          >
-            <option value="permanent">Permanent</option>
-            <option value="temporary">Temporary</option>
-          </select>
+      ) : (
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left p-4 text-gray-400 font-medium">IP Address</th>
+                  <th className="text-left p-4 text-gray-400 font-medium">Reason</th>
+                  <th className="text-left p-4 text-gray-400 font-medium">Attempts</th>
+                  <th className="text-left p-4 text-gray-400 font-medium">Banned By</th>
+                  <th className="text-left p-4 text-gray-400 font-medium">Banned At</th>
+                  <th className="text-left p-4 text-gray-400 font-medium">Expires</th>
+                  <th className="text-right p-4 text-gray-400 font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ips.map((ip) => (
+                  <tr key={ip.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td className="p-4">
+                      <code className="text-blue-400 font-mono text-sm">{ip.ip_address}</code>
+                    </td>
+                    <td className="p-4 text-gray-300">{ip.reason}</td>
+                    <td className="p-4">
+                      <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-sm">
+                        {ip.attempts} attempts
+                      </span>
+                    </td>
+                    <td className="p-4 text-gray-300">{ip.banned_by}</td>
+                    <td className="p-4 text-gray-400 text-sm">
+                      {new Date(ip.banned_at).toLocaleString()}
+                    </td>
+                    <td className="p-4">
+                      {ip.expires_at ? (
+                        <span className="text-yellow-400 text-sm">
+                          {new Date(ip.expires_at).toLocaleString()}
+                        </span>
+                      ) : (
+                        <span className="text-red-400 text-sm">Permanent</span>
+                      )}
+                    </td>
+                    <td className="p-4 text-right">
+                      <button
+                        onClick={() => handleUnban(ip.id)}
+                        className="px-3 py-1 bg-green-500/20 text-green-400 rounded hover:bg-green-500/30 transition-colors text-sm"
+                      >
+                        Unban
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        {formData.type === 'temporary' && (
-          <Input
-            label="Duration (days)"
-            type="number"
-            placeholder="7"
-            value={formData.days}
-            onChange={(e) => setFormData({ ...formData, days: e.target.value })}
-            required
-          />
-        )}
-        <div className="flex gap-2 justify-end pt-4">
-          <Button variant="ghost" onClick={onClose} type="button">
-            Cancel
-          </Button>
-          <Button type="submit" loading={loading}>
-            Ban IP
-          </Button>
+      )}
+
+      {/* Add IP Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full mx-4 border border-white/10">
+            <h3 className="text-2xl font-bold text-white mb-6">Ban IP Address</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">IP Address</label>
+                <input
+                  type="text"
+                  value={newIP.ip}
+                  onChange={(e) => setNewIP({ ...newIP, ip: e.target.value })}
+                  placeholder="192.168.1.1"
+                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-red-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Reason</label>
+                <textarea
+                  value={newIP.reason}
+                  onChange={(e) => setNewIP({ ...newIP, reason: e.target.value })}
+                  placeholder="Reason for banning this IP..."
+                  rows={3}
+                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-red-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Duration (hours)</label>
+                <select
+                  value={newIP.duration}
+                  onChange={(e) => setNewIP({ ...newIP, duration: e.target.value })}
+                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-red-500"
+                >
+                  <option value="1">1 hour</option>
+                  <option value="6">6 hours</option>
+                  <option value="24">24 hours</option>
+                  <option value="168">7 days</option>
+                  <option value="720">30 days</option>
+                  <option value="0">Permanent</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="flex-1 px-4 py-2 bg-white/5 text-gray-400 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBanIP}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                Ban IP
+              </button>
+            </div>
+          </div>
         </div>
-      </form>
-    </Modal>
+      )}
+    </PageTemplate>
   );
 }

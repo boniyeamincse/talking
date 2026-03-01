@@ -266,6 +266,109 @@ class ApiService {
     overview: () => this.request('/admin/matching/overview'),
     history: (params?: any) => this.request('/admin/matching/history'),
   };
+
+  // Security
+  security = {
+    bannedIPs: () => this.request('/admin/security/banned-ips'),
+    banIP: (data: any) =>
+      this.request('/admin/security/banned-ips', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    unbanIP: (id: number) =>
+      this.request(`/admin/security/banned-ips/${id}/unban`, { method: 'POST' }),
+    twoFactorStats: () => this.request('/admin/security/2fa/stats'),
+    twoFactorAdmins: () => this.request('/admin/security/2fa/admins'),
+    toggleEnforcement: (enabled: boolean) =>
+      this.request('/admin/security/2fa/enforcement', {
+        method: 'POST',
+        body: JSON.stringify({ enabled }),
+      }),
+    reset2FA: (adminId: number) =>
+      this.request(`/admin/security/2fa/${adminId}/reset`, { method: 'POST' }),
+    securityEvents: (params?: any) => this.request('/admin/security/events'),
+  };
+
+  // Audit Logs
+  audit = {
+    actions: (filter?: string) =>
+      this.request(`/admin/audit/actions${filter ? `?filter=${filter}` : ''}`),
+    moderation: (params?: any) => this.request('/admin/audit/moderation'),
+    apiRequests: (params?: any) => this.request('/admin/audit/api'),
+    errors: (params?: any) => this.request('/admin/audit/errors'),
+    system: (params?: any) => this.request('/admin/audit/system'),
+  };
+
+  // Advanced Analytics
+  advancedAnalytics = {
+    retention: (period?: string) =>
+      this.request(`/admin/analytics/retention?period=${period || 'month'}`),
+    churn: (period?: string) =>
+      this.request(`/admin/analytics/churn?period=${period || 'month'}`),
+    countries: () => this.request('/admin/analytics/countries'),
+    languageHeatmap: () => this.request('/admin/analytics/language-heatmap'),
+    cultureMap: () => this.request('/admin/analytics/culture-map'),
+    trending: (period?: string) =>
+      this.request(`/admin/analytics/trending?period=${period || 'day'}`),
+    feedEngagement: (period?: string) =>
+      this.request(`/admin/analytics/feed-engagement?period=${period || 'week'}`),
+    apiPerformance: () => this.request('/admin/analytics/api-performance'),
+    errorRates: (period?: string) =>
+      this.request(`/admin/analytics/error-rates?period=${period || 'day'}`),
+    queuePerformance: () => this.request('/admin/analytics/queue-performance'),
+  };
+
+  // Content Moderation
+  moderation = {
+    posts: (params?: any) => this.request('/admin/moderation/posts'),
+    comments: (params?: any) => this.request('/admin/moderation/comments'),
+    messages: (params?: any) => this.request('/admin/moderation/messages'),
+    spam: (params?: any) => this.request('/admin/moderation/spam'),
+    harassment: (params?: any) => this.request('/admin/moderation/harassment'),
+    history: (params?: any) => this.request('/admin/moderation/history'),
+    aiFlags: (params?: any) => this.request('/admin/moderation/ai-flags'),
+    takeAction: (id: number, action: string, reason?: string) =>
+      this.request(`/admin/moderation/${id}/action`, {
+        method: 'POST',
+        body: JSON.stringify({ action, reason }),
+      }),
+  };
+
+  // Social Feed
+  feed = {
+    posts: (params?: any) => this.request('/admin/feed/posts'),
+    trending: (params?: any) => this.request('/admin/feed/trending'),
+    country: (countryCode: string) =>
+      this.request(`/admin/feed/country/${countryCode}`),
+    reported: (params?: any) => this.request('/admin/feed/reported'),
+    removed: (params?: any) => this.request('/admin/feed/removed'),
+    hashtags: (params?: any) => this.request('/admin/feed/hashtags'),
+    algorithmConfig: () => this.request('/admin/feed/algorithm-config'),
+    updateAlgorithm: (data: any) =>
+      this.request('/admin/feed/algorithm-config', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    analytics: (period?: string) =>
+      this.request(`/admin/feed/analytics?period=${period || 'week'}`),
+  };
+
+  // Economy & Coins
+  economy = {
+    coinPurchases: (params?: any) => this.request('/admin/economy/coin-purchases'),
+    coinBalances: (params?: any) => this.request('/admin/economy/coin-balances'),
+    revenue: (period?: string) =>
+      this.request(`/admin/economy/revenue?period=${period || 'month'}`),
+    ledger: (params?: any) => this.request('/admin/economy/ledger'),
+    balanceRatio: () => this.request('/admin/economy/balance-ratio'),
+    paymentLogs: (params?: any) => this.request('/admin/economy/payment-logs'),
+    refunds: (params?: any) => this.request('/admin/economy/refunds'),
+    processRefund: (id: number, reason: string) =>
+      this.request(`/admin/economy/refunds/${id}/process`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      }),
+  };
 }
 
 export const api = new ApiService();
